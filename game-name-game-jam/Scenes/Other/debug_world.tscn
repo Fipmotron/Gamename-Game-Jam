@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://b08jjj3q4bpx6"]
+
+[ext_resource type="PackedScene" uid="uid://s1ckjpa6w5c3" path="res://Prefabs/Characters/Player.tscn" id="1_2x6y8"]
+[ext_resource type="Script" uid="uid://cv746l0y67v" path="res://Scripts/Gameplay/Camera.gd" id="1_8f1jv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8f1jv"]
+size = Vector2(1280, 64)
+
+[node name="DebugWorld" type="Node2D" unique_id=1034397109]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=536782506]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1648972859]
+position = Vector2(0, 160)
+shape = SubResource("RectangleShape2D_8f1jv")
+
+[node name="Polygon2D" type="Polygon2D" parent="StaticBody2D" unique_id=763081534]
+color = Color(0.31562856, 0.34044737, 0.36345944, 1)
+polygon = PackedVector2Array(-640, 128, -640, 192, 640, 192, 640, 128)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=585069508 node_paths=PackedStringArray("followNode")]
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.1
+drag_right_margin = 0.1
+script = ExtResource("1_8f1jv")
+followNode = NodePath("../Player/CameraHolder/CameraFollower")
+
+[node name="Player" parent="." unique_id=1859466204 instance=ExtResource("1_2x6y8")]
+
+[editable path="Player"]
+[editable path="Player/HealthComponent"]
+[editable path="Player/Hitboxes/SlashHitboxComponent"]
+[editable path="Player/Hitboxes/FlowHitboxComponent"]
+[editable path="Player/Hitboxes/StompHitboxComponent2"]

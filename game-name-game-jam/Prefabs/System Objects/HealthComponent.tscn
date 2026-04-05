@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://ci4txapdj8vmr"]
+
+[ext_resource type="Script" uid="uid://d4icp8mjl0n6l" path="res://Scripts/Systems/HealthComponent.gd" id="1_w2b18"]
+
+[node name="HealthComponent" type="Area2D" unique_id=685427998]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_w2b18")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=254091712]
+position = Vector2(0, 4)
+
+[connection signal="area_entered" from="." to="." method="_onHit"]
