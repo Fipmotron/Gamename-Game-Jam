@@ -1,0 +1,32 @@
+[gd_resource type="ParticleProcessMaterial" format=3 uid="uid://ctjmdrhirstfp"]
+
+[sub_resource type="Curve" id="Curve_8dj86"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.89761096, 0), -2.1084034, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xo4jj"]
+curve = SubResource("Curve_8dj86")
+
+[sub_resource type="Curve" id="Curve_cds67"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.4914676, 1), 0.0, 0.0, 0, 0, Vector2(0.8464164, 0), -2.1709754, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_7op03"]
+curve = SubResource("Curve_cds67")
+
+[resource]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(39.11, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 0.0
+initial_velocity_min = 100.0
+initial_velocity_max = 125.0
+angular_velocity_min = -1.6093254e-05
+angular_velocity_max = -1.6093254e-05
+gravity = Vector3(0, 250, 0)
+scale_min = 0.75
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_7op03")
+color = Color(1, 1, 0, 1)
+alpha_curve = SubResource("CurveTexture_xo4jj")

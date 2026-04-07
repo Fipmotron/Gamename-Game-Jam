@@ -15,12 +15,15 @@ run/main_scene="uid://b08jjj3q4bpx6"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+SignalManager="*uid://ct1ouh1wms8x4"
+
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="viewport"
-window/stretch/scale_mode="integer"
 
 [input]
 
@@ -81,6 +84,7 @@ Stomp={
 2d_physics/layer_1="Collision"
 2d_physics/layer_2="PlayerHealth"
 2d_physics/layer_3="EnemyHealth"
+2d_physics/layer_4="Detection"
 
 [physics]
 
@@ -88,6 +92,7 @@ Stomp={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"

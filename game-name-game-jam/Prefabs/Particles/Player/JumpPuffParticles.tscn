@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://b1ndbeppwrl8l"]
+
+[ext_resource type="Texture2D" uid="uid://cxo7p2flwtphn" path="res://Art/Other/Particles/CloudParticle.png" id="1_8cle3"]
+[ext_resource type="Material" uid="uid://mt4hdaw3scym" path="res://Other/ParticleMaterials/JumpPuffParticleMaterial.tres" id="2_v208p"]
+[ext_resource type="Script" uid="uid://crj7igvnxl4kl" path="res://Scripts/Gameplay/Particle.gd" id="3_p3gvm"]
+
+[node name="JumpParticles" type="GPUParticles2D" unique_id=1591089424]
+z_index = -1
+z_as_relative = false
+emitting = false
+amount = 16
+texture = ExtResource("1_8cle3")
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.9
+fixed_fps = 60
+process_material = ExtResource("2_v208p")
+script = ExtResource("3_p3gvm")

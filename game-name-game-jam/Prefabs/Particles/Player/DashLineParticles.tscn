@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://8wcqq146261"]
+
+[ext_resource type="Texture2D" uid="uid://cxhx4j1dc5ksq" path="res://Art/Other/Particles/SpeedlineParticle.png" id="1_tyoby"]
+[ext_resource type="Material" uid="uid://x0mrbgxmbgg3" path="res://Other/ParticleMaterials/DashLineParticleMaterial.tres" id="2_tyoby"]
+[ext_resource type="Script" uid="uid://crj7igvnxl4kl" path="res://Scripts/Gameplay/Particle.gd" id="3_i4hm4"]
+
+[node name="JumpParticles" type="GPUParticles2D" unique_id=1591089424]
+z_index = -1
+z_as_relative = false
+emitting = false
+amount = 4
+texture = ExtResource("1_tyoby")
+lifetime = 0.25
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+process_material = ExtResource("2_tyoby")
+script = ExtResource("3_i4hm4")

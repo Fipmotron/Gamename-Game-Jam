@@ -1,0 +1,211 @@
+[gd_scene format=3 uid="uid://cd78akk5e4yf0"]
+
+[ext_resource type="Script" uid="uid://bftnomoet0irn" path="res://Scripts/Gameplay/Enemy.gd" id="1_bw6ad"]
+[ext_resource type="PackedScene" uid="uid://d1tcoi5ag735e" path="res://Prefabs/System Objects/DetectionComponent.tscn" id="2_0vpkv"]
+[ext_resource type="PackedScene" uid="uid://dy1gwkdkois0p" path="res://Prefabs/System Objects/HitboxComponent.tscn" id="3_c16b7"]
+[ext_resource type="Texture2D" uid="uid://cl6ccr8obpvx8" path="res://Art/Characters/StationaryEnemy-Sheet.png" id="3_ylbfv"]
+[ext_resource type="PackedScene" uid="uid://ci4txapdj8vmr" path="res://Prefabs/System Objects/HealthComponent.tscn" id="4_8uy7o"]
+[ext_resource type="PackedScene" uid="uid://cflnjgqwibf2e" path="res://Prefabs/Particles/TemplateParticle.tscn" id="5_ku0rt"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xtbem"]
+radius = 24.0
+
+[sub_resource type="Animation" id="Animation_ylbfv"]
+resource_name = "Attack"
+length = 0.2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [9, 10]
+}
+
+[sub_resource type="Animation" id="Animation_birvo"]
+resource_name = "AttackBuildUp"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [6, 7, 8]
+}
+
+[sub_resource type="Animation" id="Animation_urrnw"]
+resource_name = "AttackCooldown"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [11, 12, 13]
+}
+
+[sub_resource type="Animation" id="Animation_abg8d"]
+resource_name = "Idle"
+length = 0.6
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_m1jwx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ext8u"]
+_data = {
+&"Attack": SubResource("Animation_ylbfv"),
+&"AttackBuildUp": SubResource("Animation_birvo"),
+&"AttackCooldown": SubResource("Animation_urrnw"),
+&"Idle": SubResource("Animation_abg8d"),
+&"RESET": SubResource("Animation_m1jwx")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_50ww1"]
+animation = &"Attack"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vx3u7"]
+animation = &"AttackBuildUp"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vxhmi"]
+animation = &"AttackCooldown"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ycmcm"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lgj7k"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_m8c63"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wm3e1"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ew84k"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ylbfv"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_71rbl"]
+states/Attack/node = SubResource("AnimationNodeAnimation_50ww1")
+states/Attack/position = Vector2(712, 100)
+states/AttackBuildUp/node = SubResource("AnimationNodeAnimation_vx3u7")
+states/AttackBuildUp/position = Vector2(712, 189)
+states/AttackCooldown/node = SubResource("AnimationNodeAnimation_vxhmi")
+states/AttackCooldown/position = Vector2(712, 35)
+states/Idle/node = SubResource("AnimationNodeAnimation_ycmcm")
+states/Idle/position = Vector2(353, 100)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_lgj7k"), "AttackBuildUp", "Attack", SubResource("AnimationNodeStateMachineTransition_m8c63"), "Attack", "AttackCooldown", SubResource("AnimationNodeStateMachineTransition_wm3e1"), "AttackCooldown", "Idle", SubResource("AnimationNodeStateMachineTransition_ew84k"), "Idle", "AttackBuildUp", SubResource("AnimationNodeStateMachineTransition_ylbfv")]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0vpkv"]
+radius = 128.24976
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c16b7"]
+radius = 48.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ku0rt"]
+size = Vector2(48, 48)
+
+[node name="BasicEnemy" type="CharacterBody2D" unique_id=1993418648 node_paths=PackedStringArray("detectionComponent", "hitboxComponent", "healthComponent")]
+collision_layer = 0
+script = ExtResource("1_bw6ad")
+detectionComponent = NodePath("DetectionComponent")
+hitboxComponent = NodePath("HitboxComponent")
+healthComponent = NodePath("HealthComponent")
+deathParticles = ExtResource("5_ku0rt")
+deleteOnDeath = true
+attackOnDetect = true
+attackDelayTime = 1.0
+attackBuildupTime = 0.3
+attackTime = 0.2
+attackCooldownTime = 1.0
+maintainDetection = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=872825294]
+shape = SubResource("CircleShape2D_xtbem")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=224102]
+texture = ExtResource("3_ylbfv")
+offset = Vector2(0, -24)
+hframes = 14
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1794898034]
+libraries/ = SubResource("AnimationLibrary_ext8u")
+
+[node name="AnimationTree" type="AnimationTree" parent="AnimationPlayer" unique_id=138632006]
+root_node = NodePath("../..")
+tree_root = SubResource("AnimationNodeStateMachine_71rbl")
+anim_player = NodePath("..")
+
+[node name="DetectionComponent" parent="." unique_id=2097556112 node_paths=PackedStringArray("reciver") instance=ExtResource("2_0vpkv")]
+reciver = NodePath("..")
+
+[node name="CollisionShape2D" parent="DetectionComponent" index="0" unique_id=400910715]
+shape = SubResource("CircleShape2D_0vpkv")
+
+[node name="HitboxComponent" parent="." unique_id=535223948 instance=ExtResource("3_c16b7")]
+collision_layer = 2
+damage = 10.0
+
+[node name="CollisionShape2D" parent="HitboxComponent" index="0" unique_id=1356116981]
+shape = SubResource("CircleShape2D_c16b7")
+
+[node name="HealthComponent" parent="." unique_id=685427998 node_paths=PackedStringArray("reciver") instance=ExtResource("4_8uy7o")]
+collision_mask = 4
+maxHealth = 5.0
+flowAmount = 1.0
+reciver = NodePath("..")
+
+[node name="CollisionShape2D" parent="HealthComponent" index="0" unique_id=254091712]
+position = Vector2(0, 0)
+shape = SubResource("RectangleShape2D_ku0rt")
+
+[editable path="DetectionComponent"]
+[editable path="HitboxComponent"]
+[editable path="HealthComponent"]

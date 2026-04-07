@@ -2,24 +2,23 @@ extends Node
 
 # Called once at the end of a state transition
 func _enter(host : Node):
-	host._disableBasicAttack()
-	host._cancelFlowAttack()
-	host._enableStompAttack()
+	host._resetVelocity()
+	host._animParry()
 
 # Called with every physics tick
 func _step(host : Node, delta : float):
 	host._flowHandler(delta)
-	host._directionHandler()
-	host._stompHandler(delta)
+	host._parryHandler(delta)
+	host._spriteReform(delta)
 	host._lookaheadHandler(delta)
 	host._slideCall()
 	
-	if host.isInCutscene:
-		return "Cutscene"
-	elif not host.isStomping:
-		return "Grounded"
+	if not host.isParrying:
+		if host.is_on_floor():
+			return "Grounded"
+		else:
+			return "Airborne"
 
 # Called once at the beginning of a state transition
 func _exit(host):
-	host._stompBoost()
-	host._disableStompAttack()
+	host._parryBoost()

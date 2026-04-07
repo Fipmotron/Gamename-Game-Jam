@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cflnjgqwibf2e"]
+
+[ext_resource type="Script" uid="uid://crj7igvnxl4kl" path="res://Scripts/Gameplay/Particle.gd" id="1_3ow74"]
+[ext_resource type="Material" uid="uid://dn6rsemf8g64x" path="res://Other/ParticleMaterials/TemplateParticleMaterial.tres" id="1_5ssu2"]
+
+[node name="ExampleParticle" type="GPUParticles2D" unique_id=1464931072]
+z_index = -1
+z_as_relative = false
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+speed_scale = 2.0
+explosiveness = 1.0
+fixed_fps = 60
+process_material = ExtResource("1_5ssu2")
+script = ExtResource("1_3ow74")
+
+[connection signal="finished" from="." to="." method="_onFinished"]

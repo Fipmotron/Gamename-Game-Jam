@@ -1,0 +1,149 @@
+[gd_scene format=3 uid="uid://s1ckjpa6w5c3"]
+
+[ext_resource type="Script" uid="uid://dy6h5v6whx4bx" path="res://Scripts/Global/StateMachine.gd" id="1_58wk2"]
+[ext_resource type="Script" uid="uid://b307rdpguws7q" path="res://Scripts/Gameplay/Player.gd" id="1_rao5g"]
+[ext_resource type="Script" uid="uid://m8wpsk66pk2n" path="res://Scripts/Systems/PlayerGroundedState.gd" id="3_0qv0t"]
+[ext_resource type="Script" uid="uid://b7imfahhqpcuy" path="res://Scripts/Systems/PlayerAirborneState.gd" id="4_0qv0t"]
+[ext_resource type="Script" uid="uid://hu0q8bbxyooh" path="res://Scripts/Systems/PlayerDashingState.gd" id="5_y4g4n"]
+[ext_resource type="Script" uid="uid://dpb58shfw0syo" path="res://Scripts/Systems/PlayerStompingState.gd" id="6_iq7xs"]
+[ext_resource type="PackedScene" uid="uid://ci4txapdj8vmr" path="res://Prefabs/System Objects/HealthComponent.tscn" id="6_jbh4f"]
+[ext_resource type="PackedScene" uid="uid://dy1gwkdkois0p" path="res://Prefabs/System Objects/HitboxComponent.tscn" id="7_4ut47"]
+[ext_resource type="Script" uid="uid://dyqua8nq7i8t0" path="res://Scripts/Systems/PlayerFlowingState.gd" id="7_g4bcs"]
+[ext_resource type="PackedScene" uid="uid://d1tcoi5ag735e" path="res://Prefabs/System Objects/DetectionComponent.tscn" id="9_ugjf8"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_e11xg"]
+radius = 8.0
+height = 40.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jbh4f"]
+radius = 7.0
+height = 38.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_t5ft6"]
+radius = 7.0
+height = 38.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4ut47"]
+radius = 16.0
+height = 40.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g4bcs"]
+radius = 24.33105
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_iq7xs"]
+radius = 25.298222
+
+[node name="Player" type="CharacterBody2D" unique_id=1859466204]
+collision_layer = 0
+script = ExtResource("1_rao5g")
+followSpeed = 2.0
+radius = 256.0
+maxFlowState = 1000.0
+baseFlowMultipler = 1.1
+flowDecayMultuplier = 0.75
+baseMaxSpeed = 750.0
+acceleration = 1500.0
+decceleration = 75.0
+gravity = 500.0
+jumpGravity = 200.0
+terminalVelocity = 1000.0
+jumpForce = 750.0
+doubleJumpForce = 1000.0
+jumpTime = 0.2
+coyoteTime = 0.25
+jumpBufferTime = 0.2
+dashSpeed = 1750.0
+dashSpeedRecovery = 50.0
+dashTime = 0.15
+dashCooldownTime = 0.5
+stompForce = 2500.0
+stompCooldownTime = 0.1
+stompBoostSpeed = 2000.0
+stompBoostDecay = 25.0
+flowAttackTime = 0.15
+flowAttackSpeed = 3000.0
+basicAttackTime = 0.2
+flowAttackCooldownTime = 0.25
+attackCooldownTime = 0.1
+
+[node name="StateMachine" type="Node" parent="." unique_id=326371696]
+script = ExtResource("1_58wk2")
+
+[node name="Grounded" type="Node" parent="StateMachine" unique_id=529214884]
+script = ExtResource("3_0qv0t")
+
+[node name="Airborne" type="Node" parent="StateMachine" unique_id=274823442]
+script = ExtResource("4_0qv0t")
+
+[node name="Dashing" type="Node" parent="StateMachine" unique_id=900135591]
+script = ExtResource("5_y4g4n")
+
+[node name="Stomping" type="Node" parent="StateMachine" unique_id=1077406986]
+script = ExtResource("6_iq7xs")
+
+[node name="Flowing" type="Node" parent="StateMachine" unique_id=75661219]
+script = ExtResource("7_g4bcs")
+
+[node name="Death" type="Node" parent="StateMachine" unique_id=552083969]
+
+[node name="Cutscene" type="Node" parent="StateMachine" unique_id=1606470808]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=321211441]
+position = Vector2(0, 4)
+shape = SubResource("CapsuleShape2D_e11xg")
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=1196074374]
+polygon = PackedVector2Array(-8, -16, 8, -16, 8, 24, -8, 24)
+
+[node name="HealthComponent" parent="." unique_id=685427998 node_paths=PackedStringArray("reciver") instance=ExtResource("6_jbh4f")]
+collision_mask = 2
+maxHealth = 1.0
+reciver = NodePath("..")
+
+[node name="CollisionShape2D" parent="HealthComponent" index="0" unique_id=254091712]
+shape = SubResource("CapsuleShape2D_jbh4f")
+
+[node name="DetectionComponent" parent="." unique_id=2097556112 instance=ExtResource("9_ugjf8")]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape2D" parent="DetectionComponent" index="0" unique_id=400910715]
+position = Vector2(0, 4)
+shape = SubResource("CapsuleShape2D_t5ft6")
+
+[node name="Hitboxes" type="Node2D" parent="." unique_id=956385956]
+
+[node name="SlashHitboxComponent" parent="Hitboxes" unique_id=535223948 instance=ExtResource("7_4ut47")]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" parent="Hitboxes/SlashHitboxComponent" index="0" unique_id=1356116981]
+position = Vector2(24, 4)
+shape = SubResource("CapsuleShape2D_4ut47")
+
+[node name="FlowHitboxComponent" parent="Hitboxes" unique_id=1019008134 instance=ExtResource("7_4ut47")]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" parent="Hitboxes/FlowHitboxComponent" index="0" unique_id=1356116981]
+position = Vector2(0, 4)
+shape = SubResource("CircleShape2D_g4bcs")
+
+[node name="StompHitboxComponent2" parent="Hitboxes" unique_id=273322980 instance=ExtResource("7_4ut47")]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" parent="Hitboxes/StompHitboxComponent2" index="0" unique_id=1356116981]
+position = Vector2(0, 24)
+shape = SubResource("CircleShape2D_iq7xs")
+
+[node name="CameraHolder" type="Node2D" parent="." unique_id=919204105]
+position = Vector2(0, -80)
+
+[node name="CameraFollower" type="Marker2D" parent="CameraHolder" unique_id=2045965840]
+
+[editable path="HealthComponent"]
+[editable path="DetectionComponent"]
+[editable path="Hitboxes/SlashHitboxComponent"]
+[editable path="Hitboxes/FlowHitboxComponent"]
+[editable path="Hitboxes/StompHitboxComponent2"]

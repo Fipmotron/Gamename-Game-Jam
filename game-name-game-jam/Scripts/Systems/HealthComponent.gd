@@ -13,12 +13,15 @@ signal hit
 signal death
 
 func _ready() -> void:
+	health = maxHealth
+	
 	if reciver != null:
 		connect("hit", Callable(reciver, "_onHit"))
 		connect("death", Callable(reciver, "_onDeath"))
 
 func _onHit(area : Area2D):
 	if area is Hitbox:
+		
 		health -= area.damage
 		
 		if health <= 0.0:

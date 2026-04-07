@@ -1,22 +1,25 @@
-[gd_scene format=3 uid="uid://b08jjj3q4bpx6"]
+[gd_scene format=4 uid="uid://b08jjj3q4bpx6"]
 
 [ext_resource type="PackedScene" uid="uid://s1ckjpa6w5c3" path="res://Prefabs/Characters/Player.tscn" id="1_2x6y8"]
 [ext_resource type="Script" uid="uid://cv746l0y67v" path="res://Scripts/Gameplay/Camera.gd" id="1_8f1jv"]
+[ext_resource type="PackedScene" uid="uid://cd78akk5e4yf0" path="res://Prefabs/Enemies/BasicEnemy.tscn" id="3_7gfcp"]
+[ext_resource type="Texture2D" uid="uid://bs6qkcr2w8vqu" path="res://Art/Other/TileMaps/DebugBlock.png" id="4_m732e"]
+[ext_resource type="PackedScene" uid="uid://bv2u6xuayf4c3" path="res://Prefabs/Props/LevelGoal.tscn" id="5_6i76a"]
+[ext_resource type="PackedScene" uid="uid://ca05ugn3nyanl" path="res://Prefabs/Props/FlowFiller.tscn" id="6_hxvw0"]
+[ext_resource type="PackedScene" uid="uid://bllujtwi7sva5" path="res://Prefabs/Props/BreakableBoxes.tscn" id="7_cnw03"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8f1jv"]
-size = Vector2(1280, 64)
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6i76a"]
+texture = ExtResource("4_m732e")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, -16, 16, 16, 16, 16, -16)
+
+[sub_resource type="TileSet" id="TileSet_hxvw0"]
+tile_size = Vector2i(32, 32)
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_6i76a")
 
 [node name="DebugWorld" type="Node2D" unique_id=1034397109]
-
-[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=536782506]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1648972859]
-position = Vector2(0, 160)
-shape = SubResource("RectangleShape2D_8f1jv")
-
-[node name="Polygon2D" type="Polygon2D" parent="StaticBody2D" unique_id=763081534]
-color = Color(0.31562856, 0.34044737, 0.36345944, 1)
-polygon = PackedVector2Array(-640, 128, -640, 192, 640, 192, 640, 128)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=585069508 node_paths=PackedStringArray("followNode")]
 drag_horizontal_enabled = true
@@ -28,8 +31,90 @@ followNode = NodePath("../Player/CameraHolder/CameraFollower")
 
 [node name="Player" parent="." unique_id=1859466204 instance=ExtResource("1_2x6y8")]
 
+[node name="BasicEnemy" parent="." unique_id=1993418648 instance=ExtResource("3_7gfcp")]
+position = Vector2(832, 40)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=663787195]
+tile_map_data = PackedByteArray("AAATAAUAAAAAAAAAAAASAAUAAAAAAAAAAAARAAUAAAAAAAAAAAAQAAUAAAAAAAAAAAAPAAUAAAAAAAAAAAAOAAUAAAAAAAAAAAANAAUAAAAAAAAAAAAMAAUAAAAAAAAAAAALAAUAAAAAAAAAAAAKAAUAAAAAAAAAAAAJAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAADAAUAAAAAAAAAAAACAAUAAAAAAAAAAAABAAUAAAAAAAAAAAAAAAUAAAAAAAAAAAD//wUAAAAAAAAAAAD+/wUAAAAAAAAAAAD9/wUAAAAAAAAAAAD8/wUAAAAAAAAAAAD7/wUAAAAAAAAAAAD6/wUAAAAAAAAAAAD5/wUAAAAAAAAAAAD4/wUAAAAAAAAAAAD3/wUAAAAAAAAAAAD2/wUAAAAAAAAAAAD1/wUAAAAAAAAAAAD0/wUAAAAAAAAAAADz/wUAAAAAAAAAAADy/wUAAAAAAAAAAADx/wUAAAAAAAAAAADw/wUAAAAAAAAAAADv/wUAAAAAAAAAAADu/wUAAAAAAAAAAADu/wQAAAAAAAAAAADt/wQAAAAAAAAAAADt/wUAAAAAAAAAAADs/wUAAAAAAAAAAADs/wQAAAAAAAAAAADv/wQAAAAAAAAAAADw/wQAAAAAAAAAAADx/wQAAAAAAAAAAADy/wQAAAAAAAAAAADz/wQAAAAAAAAAAAD0/wQAAAAAAAAAAAD1/wQAAAAAAAAAAAD2/wQAAAAAAAAAAAD3/wQAAAAAAAAAAAD4/wQAAAAAAAAAAAD5/wQAAAAAAAAAAAD6/wQAAAAAAAAAAAD7/wQAAAAAAAAAAAD8/wQAAAAAAAAAAAD9/wQAAAAAAAAAAAD+/wQAAAAAAAAAAAD//wQAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAQAAAAAAAAAAAACAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAFAAQAAAAAAAAAAAAGAAQAAAAAAAAAAAAHAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAJAAQAAAAAAAAAAAAKAAQAAAAAAAAAAAALAAQAAAAAAAAAAAAMAAQAAAAAAAAAAAANAAQAAAAAAAAAAAAOAAQAAAAAAAAAAAAPAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAARAAQAAAAAAAAAAAASAAQAAAAAAAAAAAATAAQAAAAAAAAAAAD6/wMAAAAAAAAAAAD3/wMAAAAAAAAAAAD3/wIAAAAAAAAAAAD0/wMAAAAAAAAAAAD0/wIAAAAAAAAAAAD0/wEAAAAAAAAAAADx/wMAAAAAAAAAAADx/wIAAAAAAAAAAADx/wEAAAAAAAAAAADx/wAAAAAAAAAAAADr/wIAAAAAAAAAAADq/wIAAAAAAAAAAADq/wMAAAAAAAAAAADp/wMAAAAAAAAAAADo/wMAAAAAAAAAAADn/wMAAAAAAAAAAADn/wIAAAAAAAAAAADm/wIAAAAAAAAAAADl/wIAAAAAAAAAAADk/wIAAAAAAAAAAADk/wMAAAAAAAAAAADl/wMAAAAAAAAAAADm/wMAAAAAAAAAAADr/wMAAAAAAAAAAADp/wIAAAAAAAAAAADo/wIAAAAAAAAAAADj/wIAAAAAAAAAAADi/wIAAAAAAAAAAADh/wIAAAAAAAAAAADg/wIAAAAAAAAAAADf/wIAAAAAAAAAAADe/wIAAAAAAAAAAADd/wIAAAAAAAAAAADc/wIAAAAAAAAAAADb/wIAAAAAAAAAAADa/wIAAAAAAAAAAADZ/wIAAAAAAAAAAADj/wMAAAAAAAAAAADi/wMAAAAAAAAAAADh/wMAAAAAAAAAAADg/wMAAAAAAAAAAADf/wMAAAAAAAAAAADe/wMAAAAAAAAAAADd/wMAAAAAAAAAAADc/wMAAAAAAAAAAADb/wMAAAAAAAAAAADa/wMAAAAAAAAAAADZ/wMAAAAAAAAAAADY/wMAAAAAAAAAAADX/wMAAAAAAAAAAADW/wMAAAAAAAAAAADY/wIAAAAAAAAAAADX/wIAAAAAAAAAAADW/wIAAAAAAAAAAADV/wIAAAAAAAAAAADU/wIAAAAAAAAAAADT/wIAAAAAAAAAAADS/wIAAAAAAAAAAADR/wIAAAAAAAAAAADQ/wIAAAAAAAAAAADP/wIAAAAAAAAAAADO/wIAAAAAAAAAAADN/wIAAAAAAAAAAADM/wIAAAAAAAAAAADL/wIAAAAAAAAAAADK/wIAAAAAAAAAAADJ/wIAAAAAAAAAAADI/wIAAAAAAAAAAADH/wIAAAAAAAAAAADG/wIAAAAAAAAAAADF/wIAAAAAAAAAAADE/wIAAAAAAAAAAADE/wMAAAAAAAAAAADF/wMAAAAAAAAAAADG/wMAAAAAAAAAAADH/wMAAAAAAAAAAADI/wMAAAAAAAAAAADJ/wMAAAAAAAAAAADK/wMAAAAAAAAAAADL/wMAAAAAAAAAAADM/wMAAAAAAAAAAADN/wMAAAAAAAAAAADO/wMAAAAAAAAAAADP/wMAAAAAAAAAAADQ/wMAAAAAAAAAAADR/wMAAAAAAAAAAADS/wMAAAAAAAAAAADT/wMAAAAAAAAAAADU/wMAAAAAAAAAAADV/wMAAAAAAAAAAAAUAAIAAAAAAAAAAAAVAAIAAAAAAAAAAAAWAAIAAAAAAAAAAAAXAAIAAAAAAAAAAAAYAAIAAAAAAAAAAAAZAAIAAAAAAAAAAAAaAAIAAAAAAAAAAAAbAAIAAAAAAAAAAAAcAAIAAAAAAAAAAAAdAAIAAAAAAAAAAAAeAAIAAAAAAAAAAAAfAAIAAAAAAAAAAAAgAAIAAAAAAAAAAAAhAAIAAAAAAAAAAAAiAAIAAAAAAAAAAAAjAAIAAAAAAAAAAAAkAAIAAAAAAAAAAAAlAAIAAAAAAAAAAAAmAAIAAAAAAAAAAAAnAAIAAAAAAAAAAAAoAAIAAAAAAAAAAAApAAIAAAAAAAAAAAAqAAIAAAAAAAAAAAArAAIAAAAAAAAAAAAsAAIAAAAAAAAAAAAtAAIAAAAAAAAAAAAuAAIAAAAAAAAAAAAvAAIAAAAAAAAAAAAwAAIAAAAAAAAAAAAxAAIAAAAAAAAAAAAyAAIAAAAAAAAAAAAzAAIAAAAAAAAAAAA0AAIAAAAAAAAAAAA1AAIAAAAAAAAAAAA2AAIAAAAAAAAAAAA3AAIAAAAAAAAAAAA4AAIAAAAAAAAAAAA5AAIAAAAAAAAAAAA6AAIAAAAAAAAAAAA7AAIAAAAAAAAAAAA7AAMAAAAAAAAAAAA6AAMAAAAAAAAAAAA5AAMAAAAAAAAAAAA4AAMAAAAAAAAAAAA3AAMAAAAAAAAAAAA2AAMAAAAAAAAAAAA1AAMAAAAAAAAAAAA0AAMAAAAAAAAAAAAzAAMAAAAAAAAAAAAyAAMAAAAAAAAAAAAxAAMAAAAAAAAAAAAwAAMAAAAAAAAAAAAvAAMAAAAAAAAAAAAuAAMAAAAAAAAAAAAtAAMAAAAAAAAAAAAsAAMAAAAAAAAAAAArAAMAAAAAAAAAAAAqAAMAAAAAAAAAAAApAAMAAAAAAAAAAAAoAAMAAAAAAAAAAAAnAAMAAAAAAAAAAAAmAAMAAAAAAAAAAAAlAAMAAAAAAAAAAAAkAAMAAAAAAAAAAAAjAAMAAAAAAAAAAAAiAAMAAAAAAAAAAAAhAAMAAAAAAAAAAAAgAAMAAAAAAAAAAAAfAAMAAAAAAAAAAAAeAAMAAAAAAAAAAAAdAAMAAAAAAAAAAAAcAAMAAAAAAAAAAAAbAAMAAAAAAAAAAAAaAAMAAAAAAAAAAAAZAAMAAAAAAAAAAAAYAAMAAAAAAAAAAAAXAAMAAAAAAAAAAAAWAAMAAAAAAAAAAAAVAAMAAAAAAAAAAAAUAAMAAAAAAAAAAADu/wMAAAAAAAAAAADu/wIAAAAAAAAAAADu/wEAAAAAAAAAAADu/wAAAAAAAAAAAADu////AAAAAAAAAADr/wEAAAAAAAAAAADr/wAAAAAAAAAAAADr////AAAAAAAAAADr//7/AAAAAAAAAADr/wQAAAAAAAAAAADq/wQAAAAAAAAAAADq/wUAAAAAAAAAAADr/wUAAAAAAAAAAADo/wEAAAAAAAAAAADo/wAAAAAAAAAAAADo////AAAAAAAAAADo//7/AAAAAAAAAADo//3/AAAAAAAAAADo//z/AAAAAAAAAADo//v/AAAAAAAAAADl/wEAAAAAAAAAAADl/wAAAAAAAAAAAADl////AAAAAAAAAADl//7/AAAAAAAAAADl//3/AAAAAAAAAADl//z/AAAAAAAAAADl//v/AAAAAAAAAADl//r/AAAAAAAAAADl//n/AAAAAAAAAAAUAAQAAAAAAAAAAAAUAAUAAAAAAAAAAAAVAAUAAAAAAAAAAAAVAAQAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_hxvw0")
+
+[node name="LevelGoal" parent="." unique_id=2231350 instance=ExtResource("5_6i76a")]
+position = Vector2(1792, -64)
+
+[node name="FlowFiller" parent="." unique_id=1659100326 instance=ExtResource("6_hxvw0")]
+position = Vector2(1280, 48)
+
+[node name="FlowFiller2" parent="." unique_id=110088517 instance=ExtResource("6_hxvw0")]
+position = Vector2(1304, 48)
+
+[node name="FlowFiller3" parent="." unique_id=1641807081 instance=ExtResource("6_hxvw0")]
+position = Vector2(1328, 48)
+
+[node name="FlowFiller4" parent="." unique_id=1511404647 instance=ExtResource("6_hxvw0")]
+position = Vector2(1352, 48)
+
+[node name="FlowFiller5" parent="." unique_id=2062990040 instance=ExtResource("6_hxvw0")]
+position = Vector2(1376, 48)
+
+[node name="FlowFiller6" parent="." unique_id=1504109457 instance=ExtResource("6_hxvw0")]
+position = Vector2(1400, 48)
+
+[node name="FlowFiller7" parent="." unique_id=940750041 instance=ExtResource("6_hxvw0")]
+position = Vector2(1424, 48)
+
+[node name="BreakableBoxes" parent="." unique_id=1923558162 instance=ExtResource("7_cnw03")]
+position = Vector2(592, 112)
+
+[node name="BreakableBoxes2" parent="." unique_id=490582644 instance=ExtResource("7_cnw03")]
+position = Vector2(624, 112)
+
+[node name="BreakableBoxes3" parent="." unique_id=1291405571 instance=ExtResource("7_cnw03")]
+position = Vector2(624, 80)
+
+[node name="BreakableBoxes4" parent="." unique_id=1026682070 instance=ExtResource("7_cnw03")]
+position = Vector2(592, 80)
+
+[node name="BreakableBoxes5" parent="." unique_id=1869552678 instance=ExtResource("7_cnw03")]
+position = Vector2(528, 112)
+
+[node name="BreakableBoxes6" parent="." unique_id=1999260186 instance=ExtResource("7_cnw03")]
+position = Vector2(560, 112)
+
+[node name="BreakableBoxes7" parent="." unique_id=1672819853 instance=ExtResource("7_cnw03")]
+position = Vector2(560, 80)
+
+[node name="BreakableBoxes8" parent="." unique_id=1697645404 instance=ExtResource("7_cnw03")]
+position = Vector2(528, 80)
+
+[node name="BreakableBoxes9" parent="." unique_id=1452458078 instance=ExtResource("7_cnw03")]
+position = Vector2(528, 48)
+
+[node name="BreakableBoxes10" parent="." unique_id=329747088 instance=ExtResource("7_cnw03")]
+position = Vector2(560, 48)
+
+[node name="BreakableBoxes11" parent="." unique_id=284502937 instance=ExtResource("7_cnw03")]
+position = Vector2(560, 16)
+
+[node name="BreakableBoxes12" parent="." unique_id=716236094 instance=ExtResource("7_cnw03")]
+position = Vector2(528, 16)
+
+[node name="BreakableBoxes13" parent="." unique_id=719281228 instance=ExtResource("7_cnw03")]
+position = Vector2(592, 48)
+
+[node name="BreakableBoxes14" parent="." unique_id=1423597901 instance=ExtResource("7_cnw03")]
+position = Vector2(624, 48)
+
+[node name="BreakableBoxes15" parent="." unique_id=1968724573 instance=ExtResource("7_cnw03")]
+position = Vector2(624, 16)
+
+[node name="BreakableBoxes16" parent="." unique_id=1328132144 instance=ExtResource("7_cnw03")]
+position = Vector2(592, 16)
+
 [editable path="Player"]
 [editable path="Player/HealthComponent"]
+[editable path="Player/DetectionComponent"]
+[editable path="Player/ParryDetectionComponent"]
 [editable path="Player/Hitboxes/SlashHitboxComponent"]
 [editable path="Player/Hitboxes/FlowHitboxComponent"]
-[editable path="Player/Hitboxes/StompHitboxComponent2"]
+[editable path="Player/Hitboxes/StompHitboxComponent"]
+[editable path="Player/Hitboxes/ParryHitboxComponent"]

@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://b0aqklbmfgn0m"]
+
+[ext_resource type="Texture2D" uid="uid://cxo7p2flwtphn" path="res://Art/Other/Particles/CloudParticle.png" id="1_lm4sw"]
+[ext_resource type="Material" uid="uid://fsi3dqdiklqt" path="res://Other/ParticleMaterials/RunParticleMaterial.tres" id="2_054hj"]
+[ext_resource type="Script" uid="uid://crj7igvnxl4kl" path="res://Scripts/Gameplay/Particle.gd" id="3_afcam"]
+
+[node name="RunParticles" type="GPUParticles2D" unique_id=1029224635]
+z_index = -1
+z_as_relative = false
+emitting = false
+amount = 4
+texture = ExtResource("1_lm4sw")
+lifetime = 0.4
+one_shot = true
+speed_scale = 1.5
+explosiveness = 0.9
+fixed_fps = 60
+process_material = ExtResource("2_054hj")
+script = ExtResource("3_afcam")

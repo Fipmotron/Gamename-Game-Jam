@@ -1,0 +1,25 @@
+[gd_resource type="ParticleProcessMaterial" format=3 uid="uid://dn6rsemf8g64x"]
+
+[sub_resource type="Curve" id="Curve_ylbfv"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.3686007, 1), -0.18679594, -0.18679594, 0, 0, Vector2(0.94539255, 0), -3.8009634, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_birvo"]
+curve = SubResource("Curve_ylbfv")
+
+[resource]
+particle_flag_disable_z = true
+angle_min = -283.8
+angle_max = 177.40001
+direction = Vector3(0, -2, 0)
+spread = 90.0
+initial_velocity_min = 100.0
+initial_velocity_max = 300.0
+angular_velocity_min = -62.640015
+angular_velocity_max = 229.56998
+radial_velocity_min = -2.2351742e-05
+radial_velocity_max = -2.2351742e-05
+gravity = Vector3(0, 1000, 0)
+scale_min = 10.0
+scale_max = 15.0
+scale_curve = SubResource("CurveTexture_birvo")
