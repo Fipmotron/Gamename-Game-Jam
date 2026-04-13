@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://buc1ussgc0ftx"
+path="res://.godot/imported/BreakingBoxes.mp3-ac798551ea07d1e12a0d725d63d3fdd2.mp3str"
+
+[deps]
+
+source_file="res://Audio/SFX/Prop SFX/BreakingBoxes.mp3"
+dest_files=["res://.godot/imported/BreakingBoxes.mp3-ac798551ea07d1e12a0d725d63d3fdd2.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

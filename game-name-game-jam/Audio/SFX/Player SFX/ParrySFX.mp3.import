@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bloxbxd04yrl0"
+path="res://.godot/imported/ParrySFX.mp3-992f921df032b78feb49cd074866e180.mp3str"
+
+[deps]
+
+source_file="res://Audio/SFX/Player SFX/ParrySFX.mp3"
+dest_files=["res://.godot/imported/ParrySFX.mp3-992f921df032b78feb49cd074866e180.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

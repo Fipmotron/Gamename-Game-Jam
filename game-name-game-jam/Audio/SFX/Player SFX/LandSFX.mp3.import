@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dlgsio4aw7jat"
+path="res://.godot/imported/LandSFX.mp3-a141b9c2af9c24e50d1421401cab1493.mp3str"
+
+[deps]
+
+source_file="res://Audio/SFX/Player SFX/LandSFX.mp3"
+dest_files=["res://.godot/imported/LandSFX.mp3-a141b9c2af9c24e50d1421401cab1493.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

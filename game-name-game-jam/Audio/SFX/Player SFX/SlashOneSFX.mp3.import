@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b61cy47tgouvy"
+path="res://.godot/imported/SlashOneSFX.mp3-caa4c8de0d5298428d495fff0552fd13.mp3str"
+
+[deps]
+
+source_file="res://Audio/SFX/Player SFX/SlashOneSFX.mp3"
+dest_files=["res://.godot/imported/SlashOneSFX.mp3-caa4c8de0d5298428d495fff0552fd13.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

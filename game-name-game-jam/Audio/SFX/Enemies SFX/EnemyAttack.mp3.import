@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://13alv3sfmnxg"
+path="res://.godot/imported/EnemyAttack.mp3-5de2b9588b3a6062dc04974af22b1f86.mp3str"
+
+[deps]
+
+source_file="res://Audio/SFX/Enemies SFX/EnemyAttack.mp3"
+dest_files=["res://.godot/imported/EnemyAttack.mp3-5de2b9588b3a6062dc04974af22b1f86.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
