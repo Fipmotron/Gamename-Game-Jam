@@ -17,3 +17,5 @@ explosiveness = 0.9
 fixed_fps = 60
 process_material = ExtResource("2_054hj")
 script = ExtResource("3_afcam")
+
+[connection signal="finished" from="." to="." method="_onFinished"]

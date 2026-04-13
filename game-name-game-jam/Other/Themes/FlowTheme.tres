@@ -1,0 +1,84 @@
+[gd_resource type="Theme" format=3 uid="uid://vsc4qgavl6kv"]
+
+[ext_resource type="Texture2D" uid="uid://8qko6p4kjh5x" path="res://Art/UI/ButtonTemplate.png" id="1_4xjs0"]
+[ext_resource type="Texture2D" uid="uid://dleddwajodyko" path="res://Art/UI/RainbowSliderFrameOne.png" id="2_jlr8b"]
+[ext_resource type="Texture2D" uid="uid://do7icb8dw2vyy" path="res://Art/UI/RainbowSliderFrameTwo.png" id="3_7o72j"]
+[ext_resource type="Texture2D" uid="uid://b80xu008p41hx" path="res://Art/UI/SliderTemplate.png" id="4_a0ge1"]
+[ext_resource type="Texture2D" uid="uid://cxjmlul3ecc77" path="res://Art/UI/RainbowSliderFrameThree.png" id="4_gu1lj"]
+[ext_resource type="Texture2D" uid="uid://bvw8rr6igqxlu" path="res://Art/UI/RainbowSliderFrameFour.png" id="5_qv1yu"]
+[ext_resource type="Texture2D" uid="uid://wjrdv5jjde6u" path="res://Art/UI/RainbowSliderFrameFive.png" id="6_5f1gm"]
+[ext_resource type="Texture2D" uid="uid://dfnama56kjcwh" path="res://Art/UI/RainbowSliderFrameSix.png" id="7_mlvlp"]
+[ext_resource type="Texture2D" uid="uid://pylt58xkrn" path="res://Art/UI/RainbowSliderFrameSeven.png" id="8_pa3i5"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_afyhv"]
+texture = ExtResource("1_4xjs0")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 20.0
+region_rect = Rect2(16, 64, 224, 48)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_eh4r2"]
+texture = ExtResource("1_4xjs0")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 20.0
+region_rect = Rect2(16, 16, 224, 48)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qeig0"]
+texture = ExtResource("1_4xjs0")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 20.0
+region_rect = Rect2(16, 116, 224, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jlr8b"]
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_ile47"]
+frames = 7
+frame_0/texture = ExtResource("2_jlr8b")
+frame_0/duration = 0.1
+frame_1/texture = ExtResource("3_7o72j")
+frame_1/duration = 0.1
+frame_2/texture = ExtResource("4_gu1lj")
+frame_2/duration = 0.1
+frame_3/texture = ExtResource("5_qv1yu")
+frame_3/duration = 0.1
+frame_4/texture = ExtResource("6_5f1gm")
+frame_4/duration = 0.1
+frame_5/texture = ExtResource("7_mlvlp")
+frame_5/duration = 0.1
+frame_6/texture = ExtResource("8_pa3i5")
+frame_6/duration = 0.1
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4yf5d"]
+texture = SubResource("AnimatedTexture_ile47")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(0, 0, 192, 16)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1s5b6"]
+texture = ExtResource("4_a0ge1")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(16, 64, 192, 16)
+
+[resource]
+Button/styles/disabled = null
+Button/styles/focus = null
+Button/styles/hover = SubResource("StyleBoxTexture_afyhv")
+Button/styles/normal = SubResource("StyleBoxTexture_eh4r2")
+Button/styles/pressed = SubResource("StyleBoxTexture_qeig0")
+HSlider/icons/grabber = null
+HSlider/icons/grabber_disabled = SubResource("AtlasTexture_jlr8b")
+HSlider/icons/grabber_highlight = null
+HSlider/icons/tick = null
+HSlider/styles/grabber_area = SubResource("StyleBoxTexture_4yf5d")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxTexture_4yf5d")
+HSlider/styles/slider = SubResource("StyleBoxTexture_1s5b6")

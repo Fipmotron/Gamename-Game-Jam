@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://dbxgydhweu6qm"]
+
+[ext_resource type="AudioStream" uid="uid://b0vnfan0hyxlo" path="res://Audio/SFX/Prop SFX/LevelEnd.mp3" id="1_yem1a"]
+[ext_resource type="Script" uid="uid://bh8308qmijcrr" path="res://Scripts/Other/SFX.gd" id="2_xb4tp"]
+
+[node name="SFX" type="AudioStreamPlayer2D" unique_id=36741416]
+stream = ExtResource("1_yem1a")
+autoplay = true
+bus = &"SFX"
+script = ExtResource("2_xb4tp")
+
+[connection signal="finished" from="." to="." method="_onFinish"]

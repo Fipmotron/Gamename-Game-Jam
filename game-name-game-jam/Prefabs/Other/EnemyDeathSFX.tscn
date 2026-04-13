@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://boosdqs4bmg35"]
+
+[ext_resource type="AudioStream" uid="uid://da8mi0gn2vhla" path="res://Audio/SFX/Enemies SFX/EnemyDeath.mp3" id="1_djqkp"]
+[ext_resource type="Script" uid="uid://bh8308qmijcrr" path="res://Scripts/Other/SFX.gd" id="2_djqkp"]
+
+[node name="SFX" type="AudioStreamPlayer2D" unique_id=36741416]
+stream = ExtResource("1_djqkp")
+autoplay = true
+bus = &"SFX"
+script = ExtResource("2_djqkp")
+
+[connection signal="finished" from="." to="." method="_onFinish"]

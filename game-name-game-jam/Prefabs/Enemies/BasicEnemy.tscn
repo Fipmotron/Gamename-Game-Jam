@@ -2,13 +2,71 @@
 
 [ext_resource type="Script" uid="uid://bftnomoet0irn" path="res://Scripts/Gameplay/Enemy.gd" id="1_bw6ad"]
 [ext_resource type="PackedScene" uid="uid://d1tcoi5ag735e" path="res://Prefabs/System Objects/DetectionComponent.tscn" id="2_0vpkv"]
+[ext_resource type="PackedScene" uid="uid://boosdqs4bmg35" path="res://Prefabs/Other/EnemyDeathSFX.tscn" id="2_ext8u"]
 [ext_resource type="PackedScene" uid="uid://dy1gwkdkois0p" path="res://Prefabs/System Objects/HitboxComponent.tscn" id="3_c16b7"]
 [ext_resource type="Texture2D" uid="uid://cl6ccr8obpvx8" path="res://Art/Characters/StationaryEnemy-Sheet.png" id="3_ylbfv"]
 [ext_resource type="PackedScene" uid="uid://ci4txapdj8vmr" path="res://Prefabs/System Objects/HealthComponent.tscn" id="4_8uy7o"]
+[ext_resource type="Texture2D" uid="uid://cxo7p2flwtphn" path="res://Art/Other/Particles/CloudParticle.png" id="4_urrnw"]
+[ext_resource type="Texture2D" uid="uid://hr4mox45vfhh" path="res://Art/Other/Particles/ChunkParticle.png" id="5_abg8d"]
 [ext_resource type="PackedScene" uid="uid://cflnjgqwibf2e" path="res://Prefabs/Particles/TemplateParticle.tscn" id="5_ku0rt"]
+[ext_resource type="AudioStream" uid="uid://cj1mrux0tr6d8" path="res://Audio/SFX/Enemies SFX/MetalSlam.mp3" id="9_m1jwx"]
+[ext_resource type="AudioStream" uid="uid://da8mi0gn2vhla" path="res://Audio/SFX/Enemies SFX/EnemyDeath.mp3" id="10_ext8u"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xtbem"]
 radius = 24.0
+
+[sub_resource type="Curve" id="Curve_8dj86"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.89761096, 0), -2.1084034, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xo4jj"]
+curve = SubResource("Curve_8dj86")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_m1jwx"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(34.33, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 52.526
+flatness = 1.0
+initial_velocity_max = 50.0
+angular_velocity_min = -1.6093254e-05
+angular_velocity_max = -1.6093254e-05
+gravity = Vector3(0, -25, 0)
+scale_min = 0.5
+alpha_curve = SubResource("CurveTexture_xo4jj")
+
+[sub_resource type="Curve" id="Curve_ext8u"]
+_limits = [-360.0, 360.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 393.9992, 0, 0, Vector2(0.51194537, 14.540344), 0.0, 0.0, 0, 0, Vector2(1, -44.12259), -901.8522, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_50ww1"]
+curve = SubResource("Curve_ext8u")
+
+[sub_resource type="Gradient" id="Gradient_vx3u7"]
+colors = PackedColorArray(0.5211406, 0.5211406, 0.5211405, 1, 0.8346143, 0.8346143, 0.8346143, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_vxhmi"]
+gradient = SubResource("Gradient_vx3u7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ycmcm"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(32, 1, 1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+angle_min = -360.0
+angle_max = 360.00003
+angle_curve = SubResource("CurveTexture_50ww1")
+direction = Vector3(0, -1, 0)
+spread = 74.16
+initial_velocity_min = 175.0
+initial_velocity_max = 200.0
+gravity = Vector3(0, 600, 0)
+scale_min = 0.5
+scale_max = 1.25
+color = Color(0.43237853, 0.5063393, 0.5148229, 1)
+color_initial_ramp = SubResource("GradientTexture1D_vxhmi")
 
 [sub_resource type="Animation" id="Animation_ylbfv"]
 resource_name = "Attack"
@@ -25,6 +83,30 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [9, 10]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ChunkParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AirParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_birvo"]
@@ -93,6 +175,30 @@ tracks/0/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ChunkParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AirParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ext8u"]
 _data = {
@@ -146,8 +252,9 @@ transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition
 [sub_resource type="CircleShape2D" id="CircleShape2D_0vpkv"]
 radius = 128.24976
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_c16b7"]
-radius = 48.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_urrnw"]
+radius = 16.0
+height = 80.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ku0rt"]
 size = Vector2(48, 48)
@@ -155,6 +262,7 @@ size = Vector2(48, 48)
 [node name="BasicEnemy" type="CharacterBody2D" unique_id=1993418648 node_paths=PackedStringArray("detectionComponent", "hitboxComponent", "healthComponent")]
 collision_layer = 0
 script = ExtResource("1_bw6ad")
+deathSFX = ExtResource("2_ext8u")
 detectionComponent = NodePath("DetectionComponent")
 hitboxComponent = NodePath("HitboxComponent")
 healthComponent = NodePath("HealthComponent")
@@ -175,6 +283,26 @@ texture = ExtResource("3_ylbfv")
 offset = Vector2(0, -24)
 hframes = 14
 
+[node name="AirParticles" type="GPUParticles2D" parent="." unique_id=1373590405]
+position = Vector2(0, 24)
+emitting = false
+amount = 24
+texture = ExtResource("4_urrnw")
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_m1jwx")
+
+[node name="ChunkParticles" type="GPUParticles2D" parent="." unique_id=1957438294]
+position = Vector2(0, 24)
+emitting = false
+amount = 16
+texture = ExtResource("5_abg8d")
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_ycmcm")
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1794898034]
 libraries/ = SubResource("AnimationLibrary_ext8u")
 
@@ -194,17 +322,29 @@ collision_layer = 2
 damage = 10.0
 
 [node name="CollisionShape2D" parent="HitboxComponent" index="0" unique_id=1356116981]
-shape = SubResource("CircleShape2D_c16b7")
+position = Vector2(0, 24)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_urrnw")
 
 [node name="HealthComponent" parent="." unique_id=685427998 node_paths=PackedStringArray("reciver") instance=ExtResource("4_8uy7o")]
 collision_mask = 4
 maxHealth = 5.0
-flowAmount = 1.0
+flowAmount = 5.0
 reciver = NodePath("..")
 
 [node name="CollisionShape2D" parent="HealthComponent" index="0" unique_id=254091712]
 position = Vector2(0, 0)
 shape = SubResource("RectangleShape2D_ku0rt")
+
+[node name="SFX" type="Node2D" parent="." unique_id=175645791]
+
+[node name="Attack" type="AudioStreamPlayer2D" parent="SFX" unique_id=1999699730]
+stream = ExtResource("9_m1jwx")
+bus = &"SFX"
+
+[node name="Hit" type="AudioStreamPlayer2D" parent="SFX" unique_id=1645559257]
+stream = ExtResource("10_ext8u")
+bus = &"SFX"
 
 [editable path="DetectionComponent"]
 [editable path="HitboxComponent"]

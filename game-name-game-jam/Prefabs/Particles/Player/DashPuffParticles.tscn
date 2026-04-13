@@ -16,3 +16,5 @@ explosiveness = 0.9
 fixed_fps = 60
 process_material = ExtResource("2_4oeo7")
 script = ExtResource("3_bfwao")
+
+[connection signal="finished" from="." to="." method="_onFinished"]

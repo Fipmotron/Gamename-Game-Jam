@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://c5vwrtm4oxpmh" path="res://Scripts/Gameplay/BreakableBoxes.gd" id="1_lct6t"]
 [ext_resource type="PackedScene" uid="uid://ci4txapdj8vmr" path="res://Prefabs/System Objects/HealthComponent.tscn" id="1_oqb6f"]
-[ext_resource type="Texture2D" uid="uid://d1qo38kjl61rg" path="res://Art/Props/MetalCrate.png" id="2_km05u"]
+[ext_resource type="PackedScene" uid="uid://bihn2nyottafg" path="res://Prefabs/Other/BreakBoxSFX.tscn" id="2_7id6p"]
+[ext_resource type="Texture2D" uid="uid://c2mqtefieqj31" path="res://Art/Characters/MetalCrate.png" id="2_km05u"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p0ful"]
 size = Vector2(32, 32)
@@ -12,6 +13,7 @@ size = Vector2(32, 32)
 
 [node name="BreakableBoxes" type="CharacterBody2D" unique_id=1923558162]
 script = ExtResource("1_lct6t")
+sfx = ExtResource("2_7id6p")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=881999616]
 shape = SubResource("RectangleShape2D_p0ful")
@@ -22,7 +24,7 @@ texture = ExtResource("2_km05u")
 [node name="HealthComponent" parent="." unique_id=685427998 node_paths=PackedStringArray("reciver") instance=ExtResource("1_oqb6f")]
 collision_mask = 4
 maxHealth = 0.1
-flowAmount = 0.1
+flowAmount = 0.5
 reciver = NodePath("..")
 
 [node name="CollisionShape2D" parent="HealthComponent" index="0" unique_id=254091712]

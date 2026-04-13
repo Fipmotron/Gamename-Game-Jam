@@ -9,3 +9,5 @@ script = ExtResource("1_c6eo6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1356116981]
 disabled = true
+
+[connection signal="area_entered" from="." to="." method="_onEnter"]

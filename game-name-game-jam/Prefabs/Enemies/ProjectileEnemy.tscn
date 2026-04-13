@@ -1,0 +1,282 @@
+[gd_scene format=3 uid="uid://dcpqjamucdkb3"]
+
+[ext_resource type="Script" uid="uid://bftnomoet0irn" path="res://Scripts/Gameplay/Enemy.gd" id="1_3esyj"]
+[ext_resource type="PackedScene" uid="uid://boosdqs4bmg35" path="res://Prefabs/Other/EnemyDeathSFX.tscn" id="2_eaem8"]
+[ext_resource type="PackedScene" uid="uid://diw0c3x5eevcf" path="res://Prefabs/Enemies/TeleportingProjectile.tscn" id="2_k8j32"]
+[ext_resource type="PackedScene" uid="uid://cflnjgqwibf2e" path="res://Prefabs/Particles/TemplateParticle.tscn" id="2_u1r7y"]
+[ext_resource type="PackedScene" uid="uid://d1tcoi5ag735e" path="res://Prefabs/System Objects/DetectionComponent.tscn" id="2_w7ubj"]
+[ext_resource type="PackedScene" uid="uid://ci4txapdj8vmr" path="res://Prefabs/System Objects/HealthComponent.tscn" id="3_k8j32"]
+[ext_resource type="Texture2D" uid="uid://rjpb55ac21ed" path="res://Art/Characters/ProjectileEnemy-Sheet.png" id="5_08j2b"]
+[ext_resource type="Texture2D" uid="uid://dv4j0ji653ypc" path="res://Art/Other/Particles/OrbParticle.png" id="7_caa7v"]
+[ext_resource type="AudioStream" uid="uid://13alv3sfmnxg" path="res://Audio/SFX/Enemies SFX/EnemyAttack.mp3" id="8_kch60"]
+[ext_resource type="AudioStream" uid="uid://da8mi0gn2vhla" path="res://Audio/SFX/Enemies SFX/EnemyDeath.mp3" id="9_eaem8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_08j2b"]
+size = Vector2(32, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u1r7y"]
+size = Vector2(384, 192)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_caa7v"]
+radius = 16.0
+height = 64.0
+
+[sub_resource type="Animation" id="Animation_k8j32"]
+resource_name = "Attack"
+length = 0.4
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [7, 8, 9, 10]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AttackParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_08j2b"]
+resource_name = "AttackBuildUp"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [4, 5, 6]
+}
+
+[sub_resource type="Animation" id="Animation_u1r7y"]
+resource_name = "AttackCooldown"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [6, 5, 4]
+}
+
+[sub_resource type="Animation" id="Animation_caa7v"]
+resource_name = "Idle"
+length = 0.4
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="Animation" id="Animation_r14hp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AttackParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r14hp"]
+_data = {
+&"Attack": SubResource("Animation_k8j32"),
+&"AttackBuildUp": SubResource("Animation_08j2b"),
+&"AttackCooldown": SubResource("Animation_u1r7y"),
+&"Idle": SubResource("Animation_caa7v"),
+&"RESET": SubResource("Animation_r14hp")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kch60"]
+animation = &"Attack"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_eaem8"]
+animation = &"AttackBuildUp"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gdwxn"]
+animation = &"AttackCooldown"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jelna"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4dgei"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qrmq1"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_o3x0a"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yyffa"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_08j2b"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_1kpu8"]
+states/Attack/node = SubResource("AnimationNodeAnimation_kch60")
+states/Attack/position = Vector2(636, 104)
+states/AttackBuildUp/node = SubResource("AnimationNodeAnimation_eaem8")
+states/AttackBuildUp/position = Vector2(524, 194)
+states/AttackCooldown/node = SubResource("AnimationNodeAnimation_gdwxn")
+states/AttackCooldown/position = Vector2(524, 24)
+states/Idle/node = SubResource("AnimationNodeAnimation_jelna")
+states/Idle/position = Vector2(376, 104)
+transitions = ["Idle", "AttackBuildUp", SubResource("AnimationNodeStateMachineTransition_4dgei"), "AttackBuildUp", "Attack", SubResource("AnimationNodeStateMachineTransition_qrmq1"), "Attack", "AttackCooldown", SubResource("AnimationNodeStateMachineTransition_o3x0a"), "AttackCooldown", "Idle", SubResource("AnimationNodeStateMachineTransition_yyffa"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_08j2b")]
+
+[sub_resource type="Gradient" id="Gradient_r14hp"]
+colors = PackedColorArray(1, 1, 1, 1, 0.53524035, 0.68628323, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_kch60"]
+gradient = SubResource("Gradient_r14hp")
+
+[sub_resource type="Curve" id="Curve_eaem8"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2764505, 1), 0.0, 0.0, 0, 0, Vector2(0.5870307, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_gdwxn"]
+curve = SubResource("Curve_eaem8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_jelna"]
+particle_flag_disable_z = true
+spread = 180.0
+flatness = 1.0
+initial_velocity_min = 50.0
+initial_velocity_max = 150.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.25
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_gdwxn")
+color = Color(0.934375, 0.957763, 0.9999992, 1)
+color_ramp = SubResource("GradientTexture1D_kch60")
+
+[node name="ProjectileEnemy" type="CharacterBody2D" unique_id=1244299127 node_paths=PackedStringArray("detectionComponent", "healthComponent")]
+collision_layer = 0
+script = ExtResource("1_3esyj")
+deathSFX = ExtResource("2_eaem8")
+detectionComponent = NodePath("DetectionComponent")
+healthComponent = NodePath("HealthComponent")
+deathParticles = ExtResource("2_u1r7y")
+deleteOnDeath = true
+attackOnDetect = true
+attackDelayTime = 1.0
+attackBuildupTime = 0.3
+attackTime = 0.4
+attackCooldownTime = 0.3
+projectile = ExtResource("2_k8j32")
+projectileOnDetect = true
+teleportToPlayer = true
+isABomb = true
+explodeTime = 0.3
+maintainDetection = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1413844794]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_08j2b")
+
+[node name="DetectionComponent" parent="." unique_id=2097556112 node_paths=PackedStringArray("reciver") instance=ExtResource("2_w7ubj")]
+reciver = NodePath("..")
+
+[node name="CollisionShape2D" parent="DetectionComponent" index="0" unique_id=400910715]
+position = Vector2(0, -128)
+shape = SubResource("RectangleShape2D_u1r7y")
+
+[node name="HealthComponent" parent="." unique_id=685427998 node_paths=PackedStringArray("reciver") instance=ExtResource("3_k8j32")]
+collision_mask = 4
+maxHealth = 1.0
+flowAmount = 5.0
+reciver = NodePath("..")
+
+[node name="CollisionShape2D" parent="HealthComponent" index="0" unique_id=254091712]
+position = Vector2(0, -40)
+shape = SubResource("CapsuleShape2D_caa7v")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=41267632]
+libraries/ = SubResource("AnimationLibrary_r14hp")
+
+[node name="AnimationTree" type="AnimationTree" parent="AnimationPlayer" unique_id=1559455208]
+root_node = NodePath("../..")
+tree_root = SubResource("AnimationNodeStateMachine_1kpu8")
+anim_player = NodePath("..")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1195362115]
+texture = ExtResource("5_08j2b")
+offset = Vector2(0, -48)
+hframes = 11
+
+[node name="AttackParticles" type="GPUParticles2D" parent="." unique_id=1858650676]
+position = Vector2(0, -64)
+emitting = false
+amount = 24
+texture = ExtResource("7_caa7v")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_jelna")
+
+[node name="SFX" type="Node2D" parent="." unique_id=1885170727]
+
+[node name="Attack" type="AudioStreamPlayer2D" parent="SFX" unique_id=1737362317]
+stream = ExtResource("8_kch60")
+bus = &"SFX"
+
+[node name="Hit" type="AudioStreamPlayer2D" parent="SFX" unique_id=221276242]
+stream = ExtResource("9_eaem8")
+bus = &"SFX"
+
+[editable path="DetectionComponent"]
+[editable path="HealthComponent"]

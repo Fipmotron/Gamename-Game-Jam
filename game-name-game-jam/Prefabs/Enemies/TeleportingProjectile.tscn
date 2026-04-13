@@ -1,0 +1,111 @@
+[gd_scene format=3 uid="uid://diw0c3x5eevcf"]
+
+[ext_resource type="Script" uid="uid://dudnhkkq1rqcw" path="res://Scripts/Gameplay/Projectile.gd" id="1_dywp3"]
+[ext_resource type="PackedScene" uid="uid://bevkn2ua6ghh3" path="res://Prefabs/Other/ExplosionDeathSFX.tscn" id="2_qvjp4"]
+[ext_resource type="PackedScene" uid="uid://dy1gwkdkois0p" path="res://Prefabs/System Objects/HitboxComponent.tscn" id="2_r4i1s"]
+[ext_resource type="Texture2D" uid="uid://cidgs7bev8aix" path="res://Art/Props/ExplodeProjectile.png" id="3_58gyo"]
+[ext_resource type="Texture2D" uid="uid://cw2va8qttg50j" path="res://Art/Props/ExplodeIndicator.png" id="4_bbuv6"]
+[ext_resource type="PackedScene" uid="uid://dbul5uuma08tv" path="res://Prefabs/Particles/Enemies/explosion_particles.tscn" id="5_bbuv6"]
+[ext_resource type="AudioStream" uid="uid://crg8762i7ytkw" path="res://Audio/SFX/Enemies SFX/Ticking.mp3" id="6_uq8v6"]
+[ext_resource type="AudioStream" uid="uid://c73ggeqoeib0m" path="res://Audio/SFX/Enemies SFX/Explosion.mp3" id="7_qvjp4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dywp3"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kvpbv"]
+radius = 192.0
+
+[sub_resource type="Animation" id="Animation_58gyo"]
+resource_name = "Flicker"
+length = 0.2
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.40784314), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_bbuv6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3vini"]
+_data = {
+&"Flicker": SubResource("Animation_58gyo"),
+&"RESET": SubResource("Animation_bbuv6")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_uq8v6"]
+animation = &"Flicker"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qvjp4"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ept47"]
+states/Flicker/node = SubResource("AnimationNodeAnimation_uq8v6")
+states/Flicker/position = Vector2(407, 190)
+transitions = ["Start", "Flicker", SubResource("AnimationNodeStateMachineTransition_qvjp4")]
+
+[node name="TeleportingProjectile" type="CharacterBody2D" unique_id=2104015564]
+collision_layer = 0
+script = ExtResource("1_dywp3")
+deathSFX = ExtResource("2_qvjp4")
+persistTime = 0.3
+deathParticles = ExtResource("5_bbuv6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1678425620]
+shape = SubResource("CircleShape2D_dywp3")
+
+[node name="HitboxComponent" parent="." unique_id=535223948 instance=ExtResource("2_r4i1s")]
+collision_layer = 2
+damage = 10.0
+
+[node name="CollisionShape2D" parent="HitboxComponent" index="0" unique_id=1356116981]
+shape = SubResource("CircleShape2D_kvpbv")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2146732778]
+texture = ExtResource("3_58gyo")
+
+[node name="ExplodeIndicator" type="Sprite2D" parent="." unique_id=732752201]
+scale = Vector2(2.4, 2.35)
+texture = ExtResource("4_bbuv6")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ExplodeIndicator" unique_id=1448707206]
+libraries/ = SubResource("AnimationLibrary_3vini")
+
+[node name="AnimationTree" type="AnimationTree" parent="ExplodeIndicator/AnimationPlayer" unique_id=957074319]
+root_node = NodePath("../..")
+tree_root = SubResource("AnimationNodeStateMachine_ept47")
+anim_player = NodePath("..")
+
+[node name="SFX" type="Node2D" parent="." unique_id=787215149]
+
+[node name="Ticking" type="AudioStreamPlayer2D" parent="SFX" unique_id=100284293]
+stream = ExtResource("6_uq8v6")
+volume_db = 10.0
+autoplay = true
+bus = &"SFX"
+
+[node name="Explode" type="AudioStreamPlayer2D" parent="SFX" unique_id=714966193]
+stream = ExtResource("7_qvjp4")
+bus = &"SFX"
+
+[editable path="HitboxComponent"]

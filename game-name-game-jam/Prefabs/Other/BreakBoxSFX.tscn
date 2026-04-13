@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bihn2nyottafg"]
+
+[ext_resource type="AudioStream" uid="uid://buc1ussgc0ftx" path="res://Audio/SFX/Prop SFX/BreakingBoxes.mp3" id="1_iqinr"]
+[ext_resource type="Script" uid="uid://bh8308qmijcrr" path="res://Scripts/Other/SFX.gd" id="2_ljo2q"]
+
+[node name="SFX" type="AudioStreamPlayer2D" unique_id=36741416]
+stream = ExtResource("1_iqinr")
+autoplay = true
+bus = &"SFX"
+script = ExtResource("2_ljo2q")
+
+[connection signal="finished" from="." to="." method="_onFinish"]

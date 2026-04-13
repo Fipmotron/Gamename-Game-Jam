@@ -1,0 +1,41 @@
+[gd_resource type="Theme" format=3 uid="uid://b1kyigv2v3r2t"]
+
+[ext_resource type="Texture2D" uid="uid://8qko6p4kjh5x" path="res://Art/UI/ButtonTemplate.png" id="1_fg6cb"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fg6cb"]
+texture = ExtResource("1_fg6cb")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 12.0
+region_rect = Rect2(160, 185, 48, 39)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_21ub3"]
+texture = ExtResource("1_fg6cb")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 20.0
+region_rect = Rect2(64, 176, 48, 48)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ylisj"]
+texture = ExtResource("1_fg6cb")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 20.0
+region_rect = Rect2(16, 176, 48, 48)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fe58g"]
+texture = ExtResource("1_fg6cb")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 12.0
+region_rect = Rect2(112, 185, 48, 39)
+
+[resource]
+Button/styles/focus = SubResource("StyleBoxTexture_fg6cb")
+Button/styles/hover = SubResource("StyleBoxTexture_21ub3")
+Button/styles/normal = SubResource("StyleBoxTexture_ylisj")
+Button/styles/pressed = SubResource("StyleBoxTexture_fe58g")

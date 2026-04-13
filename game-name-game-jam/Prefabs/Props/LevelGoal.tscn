@@ -1,19 +1,80 @@
 [gd_scene format=3 uid="uid://bv2u6xuayf4c3"]
 
 [ext_resource type="Script" uid="uid://dm2qt5u8wpwbs" path="res://Scripts/Gameplay/LevelGoal.gd" id="1_76o1c"]
+[ext_resource type="PackedScene" uid="uid://dbxgydhweu6qm" path="res://Prefabs/Other/LevelEndSFX.tscn" id="2_cr2bi"]
+[ext_resource type="Texture2D" uid="uid://8k1n0f0lgwsj" path="res://Art/Props/LevelGoal-Sheet.png" id="2_rrd2w"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_76o1c"]
-radius = 48.6621
+radius = 24.0
+
+[sub_resource type="Animation" id="Animation_rrd2w"]
+resource_name = "Idle"
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+}
+
+[sub_resource type="Animation" id="Animation_cr2bi"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_e3x72"]
+_data = {
+&"Idle": SubResource("Animation_rrd2w"),
+&"RESET": SubResource("Animation_cr2bi")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rrd2w"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cr2bi"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_e3x72"]
+states/Idle/node = SubResource("AnimationNodeAnimation_rrd2w")
+states/Idle/position = Vector2(290, 135)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_cr2bi")]
 
 [node name="LevelGoal" type="Area2D" unique_id=2231350]
 collision_layer = 0
 collision_mask = 8
 script = ExtResource("1_76o1c")
+sfx = ExtResource("2_cr2bi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1758803915]
 shape = SubResource("CircleShape2D_76o1c")
 
-[node name="Polygon2D" type="Polygon2D" parent="." unique_id=1187959528]
-polygon = PackedVector2Array(0, -64, 16, -8, 64, 0, 16, 16, 0, 64, -16, 16, -64, 0, -16, -8)
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2041912903]
+texture = ExtResource("2_rrd2w")
+hframes = 10
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1635997446]
+libraries/ = SubResource("AnimationLibrary_e3x72")
+
+[node name="AnimationTree" type="AnimationTree" parent="AnimationPlayer" unique_id=360210340]
+root_node = NodePath("../..")
+tree_root = SubResource("AnimationNodeStateMachine_e3x72")
+anim_player = NodePath("..")
 
 [connection signal="area_entered" from="." to="." method="_onEntered"]

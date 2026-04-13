@@ -1,0 +1,68 @@
+[gd_resource type="Theme" format=3 uid="uid://cfcxi3lsf5lpw"]
+
+[ext_resource type="Texture2D" uid="uid://8qko6p4kjh5x" path="res://Art/UI/ButtonTemplate.png" id="1_afyhv"]
+[ext_resource type="Texture2D" uid="uid://g7jvcui8dxpt" path="res://Art/UI/GrabberUnpressed.png" id="2_a20tw"]
+[ext_resource type="Texture2D" uid="uid://b80xu008p41hx" path="res://Art/UI/SliderTemplate.png" id="2_eh4r2"]
+[ext_resource type="Texture2D" uid="uid://px2a2hyqf30o" path="res://Art/UI/GrabberPressed.png" id="3_th002"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_afyhv"]
+texture = ExtResource("1_afyhv")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 20.0
+region_rect = Rect2(16, 64, 224, 48)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_eh4r2"]
+texture = ExtResource("1_afyhv")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 20.0
+region_rect = Rect2(16, 16, 224, 48)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qeig0"]
+texture = ExtResource("1_afyhv")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 20.0
+region_rect = Rect2(16, 116, 224, 44)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_a20tw"]
+texture = ExtResource("2_eh4r2")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(16, 96, 192, 16)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_th002"]
+texture = ExtResource("2_eh4r2")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(16, 96, 192, 16)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8fmb1"]
+texture = ExtResource("2_eh4r2")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(16, 64, 192, 16)
+
+[resource]
+Button/styles/disabled = null
+Button/styles/focus = null
+Button/styles/hover = SubResource("StyleBoxTexture_afyhv")
+Button/styles/normal = SubResource("StyleBoxTexture_eh4r2")
+Button/styles/pressed = SubResource("StyleBoxTexture_qeig0")
+HSlider/icons/grabber = ExtResource("2_a20tw")
+HSlider/icons/grabber_disabled = ExtResource("3_th002")
+HSlider/icons/grabber_highlight = ExtResource("3_th002")
+HSlider/icons/tick = null
+HSlider/styles/grabber_area = SubResource("StyleBoxTexture_a20tw")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxTexture_th002")
+HSlider/styles/slider = SubResource("StyleBoxTexture_8fmb1")

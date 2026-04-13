@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bg5x1p8p1s82k"]
+
+[ext_resource type="Texture2D" uid="uid://8hrgm1yrdvec" path="res://Art/Other/SpaceTexture.png" id="1_84b0q"]
+[ext_resource type="Script" uid="uid://co7pavsb7rl6p" path="res://Scripts/Other/FlowTrail.gd" id="2_saavf"]
+
+[sub_resource type="Curve" id="Curve_84b0q"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="FlowTrail" type="Line2D" unique_id=354201088]
+points = PackedVector2Array(0, 0, 0, 0)
+width = 20.0
+width_curve = SubResource("Curve_84b0q")
+texture = ExtResource("1_84b0q")
+texture_mode = 1
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("2_saavf")
+time = 1.0
