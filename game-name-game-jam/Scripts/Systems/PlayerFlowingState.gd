@@ -4,15 +4,20 @@ extends State
 func _enter(host : Node):
 	host._disableBasicAttack()
 	host._enableFlowHitbox()
+	host._spriteFlipper()
 
 # Called with every physics tick
 func _step(host : Node, delta : float):
 	host._flowHandler(delta)
 	host._flowAttackHandler(delta)
 	host._lookaheadHandler(delta)
+	host._afterImageUpdater()
+	host._spriteReform(10)
 	host._slideCall()
 	
-	if host.isInCutscene:
+	if host.isDead:
+		return "Death"
+	elif host.isInCutscene:
 		return "Cutscene"
 	elif not host.isFlowAttacking:
 		if host.is_on_floor():

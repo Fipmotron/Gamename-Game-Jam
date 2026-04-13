@@ -24,6 +24,7 @@ func _step(host : Node, delta : float):
 	host._flowAttackCheck(delta)
 	host._attackRefresh(delta)
 	host._parryCheck(delta)
+	host._afterImageUpdater()
 	host._slideCall()
 	
 	if not host.isAttacking:
@@ -34,7 +35,9 @@ func _step(host : Node, delta : float):
 		else:
 			host._animFall()
 	
-	if host.isInCutscene:
+	if host.isDead:
+		return "Death"
+	elif host.isInCutscene:
 		return "Cutscene"
 	elif host.isParrying:
 		return "Parry"

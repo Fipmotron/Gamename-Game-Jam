@@ -2,24 +2,845 @@
 
 [ext_resource type="PackedScene" uid="uid://s1ckjpa6w5c3" path="res://Prefabs/Characters/Player.tscn" id="1_2x6y8"]
 [ext_resource type="Script" uid="uid://cv746l0y67v" path="res://Scripts/Gameplay/Camera.gd" id="1_8f1jv"]
+[ext_resource type="Script" uid="uid://cfq2dcrlx081t" path="res://Scripts/Gameplay/LevelHost.gd" id="1_83x3i"]
 [ext_resource type="PackedScene" uid="uid://cd78akk5e4yf0" path="res://Prefabs/Enemies/BasicEnemy.tscn" id="3_7gfcp"]
-[ext_resource type="Texture2D" uid="uid://bs6qkcr2w8vqu" path="res://Art/Other/TileMaps/DebugBlock.png" id="4_m732e"]
+[ext_resource type="Theme" uid="uid://vsc4qgavl6kv" path="res://Other/Themes/FlowTheme.tres" id="3_jsfjr"]
+[ext_resource type="Shader" uid="uid://b3jx0fe4tv8rq" path="res://Other/TransitionShader.gdshader" id="5_0e6sh"]
 [ext_resource type="PackedScene" uid="uid://bv2u6xuayf4c3" path="res://Prefabs/Props/LevelGoal.tscn" id="5_6i76a"]
+[ext_resource type="Theme" uid="uid://cfcxi3lsf5lpw" path="res://Other/Themes/BaseTheme.tres" id="5_qqhgd"]
+[ext_resource type="TileSet" uid="uid://be5vkmnsmpio4" path="res://Other/TileMaps/DebugTilemap.tres" id="6_fchn1"]
+[ext_resource type="FontFile" uid="uid://d2ljhnhyolvg8" path="res://Other/Dosis-Bold.ttf" id="6_ge54k"]
 [ext_resource type="PackedScene" uid="uid://ca05ugn3nyanl" path="res://Prefabs/Props/FlowFiller.tscn" id="6_hxvw0"]
+[ext_resource type="Script" uid="uid://dejulyvgi62lj" path="res://Scripts/Other/UITween.gd" id="7_asveu"]
 [ext_resource type="PackedScene" uid="uid://bllujtwi7sva5" path="res://Prefabs/Props/BreakableBoxes.tscn" id="7_cnw03"]
+[ext_resource type="TileSet" uid="uid://ciyudu2euqkpo" path="res://Other/TileMaps/LevelTilemap.tres" id="7_js5kw"]
+[ext_resource type="Texture2D" uid="uid://dkmg88jrdwqvk" path="res://Art/Backgrounds/LevelEndBackground-Sheet.png" id="8_4f336"]
+[ext_resource type="Script" uid="uid://3lsptlb74s5y" path="res://Scripts/Gameplay/LevelUI.gd" id="8_fchn1"]
+[ext_resource type="Theme" uid="uid://b1kyigv2v3r2t" path="res://Other/Themes/CheckboxTheme.tres" id="8_jsfjr"]
+[ext_resource type="AudioStream" uid="uid://be6mnaahsim1o" path="res://Audio/SFX/SlideTick.mp3" id="10_b00fe"]
+[ext_resource type="AudioStream" uid="uid://doqvusrrmobfc" path="res://Audio/SFX/NEWButtonPress.mp3" id="11_b00fe"]
+[ext_resource type="PackedScene" uid="uid://dcpqjamucdkb3" path="res://Prefabs/Enemies/ProjectileEnemy.tscn" id="11_gw3f4"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6i76a"]
-texture = ExtResource("4_m732e")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, -16, 16, 16, 16, 16, -16)
+[sub_resource type="Animation" id="Animation_js5kw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
 
-[sub_resource type="TileSet" id="TileSet_hxvw0"]
-tile_size = Vector2i(32, 32)
-physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_6i76a")
+[sub_resource type="Animation" id="Animation_gw3f4"]
+resource_name = "Run"
+length = 0.6
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [4, 5, 6, 7, 8, 9]
+}
+
+[sub_resource type="Animation" id="Animation_83x3i"]
+resource_name = "Startup"
+length = 0.4
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0e6sh"]
+_data = {
+&"RESET": SubResource("Animation_js5kw"),
+&"Run": SubResource("Animation_gw3f4"),
+&"Startup": SubResource("Animation_83x3i")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_u0mlb"]
+animation = &"Run"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qqhgd"]
+animation = &"Startup"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ge54k"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_asveu"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_jsfjr"]
+states/End/position = Vector2(899, 100)
+states/Run/node = SubResource("AnimationNodeAnimation_u0mlb")
+states/Run/position = Vector2(440, 72)
+states/Startup/node = SubResource("AnimationNodeAnimation_qqhgd")
+states/Startup/position = Vector2(440, 136)
+transitions = ["Start", "Startup", SubResource("AnimationNodeStateMachineTransition_ge54k"), "Startup", "Run", SubResource("AnimationNodeStateMachineTransition_asveu")]
+
+[sub_resource type="LabelSettings" id="LabelSettings_jsfjr"]
+font = ExtResource("6_ge54k")
+font_size = 64
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_y3u6o"]
+font = ExtResource("6_ge54k")
+font_size = 64
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u0mlb"]
+shader = ExtResource("5_0e6sh")
+shader_parameter/progress = 1.0
+shader_parameter/diamondPixelSize = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0e6sh"]
+
+[sub_resource type="Animation" id="Animation_0e6sh"]
+resource_name = "FadeIn"
+length = 0.5
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.45, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_u0mlb"]
+resource_name = "FadeOut"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_qqhgd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ge54k"]
+_data = {
+&"FadeIn": SubResource("Animation_0e6sh"),
+&"FadeOut": SubResource("Animation_u0mlb"),
+&"RESET": SubResource("Animation_qqhgd")
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u0mlb"]
+bg_color = Color(0.07284262, 0.072842635, 0.072842576, 0.3019608)
+
+[sub_resource type="LabelSettings" id="LabelSettings_qqhgd"]
+font_size = 128
+
+[sub_resource type="LabelSettings" id="LabelSettings_asveu"]
+font = ExtResource("6_ge54k")
+font_size = 64
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_w2l66"]
+font = ExtResource("6_ge54k")
+font_size = 64
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_b00fe"]
+font = ExtResource("6_ge54k")
+font_size = 32
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_37kca"]
+font = ExtResource("6_ge54k")
+font_size = 32
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_mcu0n"]
+font = ExtResource("6_ge54k")
+font_size = 64
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Environment" id="Environment_fchn1"]
+background_mode = 3
+tonemap_mode = 3
+tonemap_white = 16.0
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 1.0
+glow_bloom = 0.1
+adjustment_enabled = true
+adjustment_contrast = 1.25
+adjustment_saturation = 1.1
 
 [node name="DebugWorld" type="Node2D" unique_id=1034397109]
+script = ExtResource("1_83x3i")
+
+[node name="UI" type="Control" parent="." unique_id=1507245689]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("8_fchn1")
+nextScene = "res://Scenes/Levels/level_two.tscn"
+
+[node name="FlowLayer" type="CanvasLayer" parent="UI" unique_id=1163560367]
+
+[node name="FlowSlider" type="HSlider" parent="UI/FlowLayer" unique_id=2047047359]
+z_index = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -192.0
+offset_top = 16.0
+offset_right = 192.0
+offset_bottom = 64.000015
+grow_horizontal = 2
+mouse_filter = 2
+theme = ExtResource("3_jsfjr")
+max_value = 5.0
+step = 0.1
+value = 5.0
+editable = false
+scrollable = false
+
+[node name="LevelEnd" type="Control" parent="UI" unique_id=1718939009]
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="UI/LevelEnd" unique_id=129254357]
+layer = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="UI/LevelEnd/CanvasLayer" unique_id=18851983]
+visible = false
+position = Vector2(640, 360)
+texture = ExtResource("8_4f336")
+hframes = 10
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/LevelEnd/CanvasLayer" unique_id=69944831]
+libraries/ = SubResource("AnimationLibrary_0e6sh")
+
+[node name="AnimationTree" type="AnimationTree" parent="UI/LevelEnd/CanvasLayer/AnimationPlayer" unique_id=271750142]
+active = false
+root_node = NodePath("../..")
+tree_root = SubResource("AnimationNodeStateMachine_jsfjr")
+anim_player = NodePath("..")
+
+[node name="RestartButton" type="Button" parent="UI/LevelEnd/CanvasLayer" unique_id=1784740848]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -128.0
+offset_top = -144.0
+offset_right = 128.0
+offset_bottom = -64.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_qqhgd")
+script = ExtResource("7_asveu")
+changePosition = Vector2(512, 780)
+textChangePosition = Vector2(8, -24)
+
+[node name="Label" type="Label" parent="UI/LevelEnd/CanvasLayer/RestartButton" unique_id=1877768234]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -48.0
+offset_right = 120.0
+offset_bottom = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "RESTART"
+label_settings = SubResource("LabelSettings_jsfjr")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="QuitButton" type="Button" parent="UI/LevelEnd/CanvasLayer" unique_id=1484072648]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 192.0
+offset_top = -144.0
+offset_right = 448.0
+offset_bottom = -64.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_qqhgd")
+script = ExtResource("7_asveu")
+changePosition = Vector2(832, 780)
+textChangePosition = Vector2(64, -24)
+
+[node name="Label" type="Label" parent="UI/LevelEnd/CanvasLayer/QuitButton" unique_id=518708528]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -48.0
+offset_right = 64.0
+offset_bottom = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "QUIT"
+label_settings = SubResource("LabelSettings_jsfjr")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NextButton" type="Button" parent="UI/LevelEnd/CanvasLayer" unique_id=1748789672]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -448.0
+offset_top = -144.0
+offset_right = -192.0
+offset_bottom = -64.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_qqhgd")
+script = ExtResource("7_asveu")
+changePosition = Vector2(192, 780)
+textChangePosition = Vector2(57, -24)
+
+[node name="Label" type="Label" parent="UI/LevelEnd/CanvasLayer/NextButton" unique_id=143020340]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -71.0
+offset_top = -48.0
+offset_right = 71.0
+offset_bottom = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "NEXT"
+label_settings = SubResource("LabelSettings_jsfjr")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Timer" type="Label" parent="UI/LevelEnd/CanvasLayer" unique_id=1195100728]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = 72.0
+offset_right = 160.0
+offset_bottom = 154.00012
+grow_horizontal = 2
+grow_vertical = 2
+text = "TIME: 00:00"
+label_settings = SubResource("LabelSettings_y3u6o")
+script = ExtResource("7_asveu")
+changePosition = Vector2(480, 750)
+
+[node name="CanvasLevelTransition" type="CanvasLayer" parent="UI" unique_id=320395284]
+layer = 2
+
+[node name="LevelTransition" type="Panel" parent="UI/CanvasLevelTransition" unique_id=1749711731]
+modulate = Color(0, 0, 0, 1)
+z_index = 3
+z_as_relative = false
+material = SubResource("ShaderMaterial_u0mlb")
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0e6sh")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/CanvasLevelTransition/LevelTransition" unique_id=1642228087]
+libraries/ = SubResource("AnimationLibrary_ge54k")
+
+[node name="PauseMenu" type="Control" parent="UI" unique_id=722105702]
+process_mode = 3
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="UI/PauseMenu" unique_id=1922365096]
+visible = false
+offset = Vector2(640, 360)
+transform = Transform2D(1, 0, 0, 1, 640, 360)
+
+[node name="Background" type="Panel" parent="UI/PauseMenu/CanvasLayer" unique_id=1532701362]
+z_index = 2
+z_as_relative = false
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_u0mlb")
+
+[node name="Paused" type="Label" parent="UI/PauseMenu/CanvasLayer/Background" unique_id=1844837308]
+layout_mode = 0
+offset_left = 32.0
+offset_right = 526.0
+offset_bottom = 175.0
+text = "PAUSED"
+label_settings = SubResource("LabelSettings_qqhgd")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Main" type="Control" parent="UI/PauseMenu/CanvasLayer/Background" unique_id=1329869250]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Resume" type="Button" parent="UI/PauseMenu/CanvasLayer/Background/Main" unique_id=1558985123]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = -104.0
+offset_right = 448.0
+offset_bottom = -24.0
+grow_vertical = 2
+theme = ExtResource("5_qqhgd")
+script = ExtResource("7_asveu")
+textChangePosition = Vector2(8, -24)
+
+[node name="Label" type="Label" parent="UI/PauseMenu/CanvasLayer/Background/Main/Resume" unique_id=1312561486]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -184.0
+offset_top = -48.0
+offset_right = 184.0
+offset_bottom = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "RESUME"
+label_settings = SubResource("LabelSettings_asveu")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Restart" type="Button" parent="UI/PauseMenu/CanvasLayer/Background/Main" unique_id=1358173758]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 96.0
+offset_top = 8.0
+offset_right = 480.0
+offset_bottom = 88.0
+grow_vertical = 2
+theme = ExtResource("5_qqhgd")
+script = ExtResource("7_asveu")
+textChangePosition = Vector2(8, -24)
+
+[node name="Label" type="Label" parent="UI/PauseMenu/CanvasLayer/Background/Main/Restart" unique_id=22227483]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -184.0
+offset_top = -48.0
+offset_right = 184.0
+offset_bottom = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "RESTART"
+label_settings = SubResource("LabelSettings_asveu")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Options" type="Button" parent="UI/PauseMenu/CanvasLayer/Background/Main" unique_id=1848761554]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 128.0
+offset_top = 119.0
+offset_right = 512.0
+offset_bottom = 199.0
+grow_vertical = 2
+theme = ExtResource("5_qqhgd")
+script = ExtResource("7_asveu")
+textChangePosition = Vector2(8, -24)
+
+[node name="Label" type="Label" parent="UI/PauseMenu/CanvasLayer/Background/Main/Options" unique_id=1212015705]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -184.0
+offset_top = -48.0
+offset_right = 184.0
+offset_bottom = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "OPTIONS"
+label_settings = SubResource("LabelSettings_asveu")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Quit" type="Button" parent="UI/PauseMenu/CanvasLayer/Background/Main" unique_id=777097055]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 160.0
+offset_top = 232.0
+offset_right = 544.0
+offset_bottom = 312.0
+grow_vertical = 2
+theme = ExtResource("5_qqhgd")
+script = ExtResource("7_asveu")
+textChangePosition = Vector2(8, -24)
+
+[node name="Label" type="Label" parent="UI/PauseMenu/CanvasLayer/Background/Main/Quit" unique_id=139384820]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -184.0
+offset_top = -48.0
+offset_right = 184.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "QUIT"
+label_settings = SubResource("LabelSettings_asveu")
+horizontal_alignment = 1
+
+[node name="Option" type="Control" parent="UI/PauseMenu/CanvasLayer/Background" unique_id=856816837]
+process_mode = 3
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Volume" type="Label" parent="UI/PauseMenu/CanvasLayer/Background/Option" unique_id=1716708406]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -376.0
+offset_right = -136.00049
+offset_bottom = 88.0
+grow_horizontal = 0
+text = "Volume"
+label_settings = SubResource("LabelSettings_w2l66")
+horizontal_alignment = 1
+script = ExtResource("7_asveu")
+changePosition = Vector2(1544, 360)
+
+[node name="MasterSlider" type="HSlider" parent="UI/PauseMenu/CanvasLayer/Background/Option" unique_id=545052048]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 192.0
+offset_top = -576.0
+offset_right = 575.99976
+offset_bottom = -544.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_qqhgd")
+max_value = 1.0
+step = 0.01
+value = 0.5
+script = ExtResource("7_asveu")
+changePosition = Vector2(832, -128)
+
+[node name="Label" type="Label" parent="UI/PauseMenu/CanvasLayer/Background/Option/MasterSlider" unique_id=1543508708]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -72.0
+offset_top = -48.0
+offset_right = 72.0
+offset_bottom = -3.0
+grow_horizontal = 2
+text = "Master"
+label_settings = SubResource("LabelSettings_b00fe")
+horizontal_alignment = 1
+
+[node name="MusicSlider" type="HSlider" parent="UI/PauseMenu/CanvasLayer/Background/Option" unique_id=1581193119]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 192.0
+offset_top = -496.03003
+offset_right = 576.0
+offset_bottom = -464.03003
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_qqhgd")
+max_value = 1.0
+step = 0.01
+value = 0.5
+script = ExtResource("7_asveu")
+changePosition = Vector2(832, -128)
+
+[node name="Label" type="Label" parent="UI/PauseMenu/CanvasLayer/Background/Option/MusicSlider" unique_id=434057792]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -72.0
+offset_top = -48.0
+offset_right = 72.0
+offset_bottom = -3.0
+grow_horizontal = 2
+text = "Music"
+label_settings = SubResource("LabelSettings_b00fe")
+horizontal_alignment = 1
+
+[node name="SFXSlider" type="HSlider" parent="UI/PauseMenu/CanvasLayer/Background/Option" unique_id=644046379]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 192.0
+offset_top = -416.03003
+offset_right = 576.0
+offset_bottom = -384.03003
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_qqhgd")
+max_value = 1.0
+step = 0.01
+value = 0.5
+script = ExtResource("7_asveu")
+changePosition = Vector2(832, -128)
+
+[node name="Label" type="Label" parent="UI/PauseMenu/CanvasLayer/Background/Option/SFXSlider" unique_id=471320355]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -72.0
+offset_top = -48.0
+offset_right = 72.0
+offset_bottom = -3.0
+grow_horizontal = 2
+text = "SFX"
+label_settings = SubResource("LabelSettings_b00fe")
+horizontal_alignment = 1
+
+[node name="Visuals" type="Label" parent="UI/PauseMenu/CanvasLayer/Background/Option" unique_id=1664195660]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -352.0
+offset_top = 360.0
+offset_right = -160.0
+offset_bottom = 448.0
+grow_horizontal = 0
+text = "Visuals"
+label_settings = SubResource("LabelSettings_w2l66")
+horizontal_alignment = 1
+script = ExtResource("7_asveu")
+changePosition = Vector2(928, 728)
+
+[node name="Fullscreen" type="Button" parent="UI/PauseMenu/CanvasLayer/Background/Option" unique_id=1850668373]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 296.0
+offset_top = -264.0
+offset_right = 344.0
+offset_bottom = -217.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("8_jsfjr")
+toggle_mode = true
+script = ExtResource("7_asveu")
+changePosition = Vector2(936, 728)
+
+[node name="Label" type="Label" parent="UI/PauseMenu/CanvasLayer/Background/Option/Fullscreen" unique_id=357769083]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -184.0
+offset_top = -27.5
+offset_right = 11.0
+offset_bottom = 26.5
+grow_vertical = 2
+text = "FULLSCREEN"
+label_settings = SubResource("LabelSettings_37kca")
+vertical_alignment = 1
+
+[node name="VSync" type="Button" parent="UI/PauseMenu/CanvasLayer/Background/Option" unique_id=961134272]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 528.0
+offset_top = -264.0
+offset_right = 576.0
+offset_bottom = -217.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("8_jsfjr")
+toggle_mode = true
+script = ExtResource("7_asveu")
+changePosition = Vector2(1168, 728)
+
+[node name="Label" type="Label" parent="UI/PauseMenu/CanvasLayer/Background/Option/VSync" unique_id=547285269]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -104.0
+offset_top = -27.5
+offset_right = -2.0
+offset_bottom = 26.5
+grow_vertical = 2
+text = "VSYNC"
+label_settings = SubResource("LabelSettings_37kca")
+vertical_alignment = 1
+
+[node name="BackButton" type="Button" parent="UI/PauseMenu/CanvasLayer/Background/Option" unique_id=1650057065]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 192.0
+offset_top = -168.0
+offset_right = 576.0
+offset_bottom = -88.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_qqhgd")
+script = ExtResource("7_asveu")
+changePosition = Vector2(832, 728)
+textChangePosition = Vector2(64, -24)
+
+[node name="Label" type="Label" parent="UI/PauseMenu/CanvasLayer/Background/Option/BackButton" unique_id=1869910990]
+layout_mode = 1
+offset_left = 64.0
+offset_top = -8.0
+offset_right = 320.0
+offset_bottom = 80.0
+text = "BACK"
+label_settings = SubResource("LabelSettings_mcu0n")
+horizontal_alignment = 1
+
+[node name="Tick" type="AudioStreamPlayer" parent="UI" unique_id=486601643]
+stream = ExtResource("10_b00fe")
+bus = &"SFX"
+
+[node name="Press" type="AudioStreamPlayer" parent="UI" unique_id=667642569]
+stream = ExtResource("11_b00fe")
+bus = &"SFX"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=585069508 node_paths=PackedStringArray("followNode")]
 drag_horizontal_enabled = true
@@ -30,13 +851,17 @@ script = ExtResource("1_8f1jv")
 followNode = NodePath("../Player/CameraHolder/CameraFollower")
 
 [node name="Player" parent="." unique_id=1859466204 instance=ExtResource("1_2x6y8")]
+deathTime = 0.4
 
 [node name="BasicEnemy" parent="." unique_id=1993418648 instance=ExtResource("3_7gfcp")]
 position = Vector2(832, 40)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=663787195]
 tile_map_data = PackedByteArray("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AAAsAAMAAAAAAAAAAAArAAMAAAAAAAAAAAAqAAMAAAAAAAAAAAApAAMAAAAAAAAAAAAoAAMAAAAAAAAAAAAnAAMAAAAAAAAAAAAmAAMAAAAAAAAAAAAlAAMAAAAAAAAAAAAkAAMAAAAAAAAAAAAjAAMAAAAAAAAAAAAiAAMAAAAAAAAAAAAhAAMAAAAAAAAAAAAgAAMAAAAAAAAAAAAfAAMAAAAAAAAAAAAeAAMAAAAAAAAAAAAdAAMAAAAAAAAAAAAcAAMAAAAAAAAAAAAbAAMAAAAAAAAAAAAaAAMAAAAAAAAAAAAZAAMAAAAAAAAAAAAYAAMAAAAAAAAAAAAXAAMAAAAAAAAAAAAWAAMAAAAAAAAAAAAVAAMAAAAAAAAAAAAUAAMAAAAAAAAAAADu/wMAAAAAAAAAAADu/wIAAAAAAAAAAADu/wEAAAAAAAAAAADu/wAAAAAAAAAAAADu////AAAAAAAAAADr/wEAAAAAAAAAAADr/wAAAAAAAAAAAADr////AAAAAAAAAADr//7/AAAAAAAAAADr/wQAAAAAAAAAAADq/wQAAAAAAAAAAADq/wUAAAAAAAAAAADr/wUAAAAAAAAAAADo/wEAAAAAAAAAAADo/wAAAAAAAAAAAADo////AAAAAAAAAADo//7/AAAAAAAAAADo//3/AAAAAAAAAADo//z/AAAAAAAAAADo//v/AAAAAAAAAADl/wEAAAAAAAAAAADl/wAAAAAAAAAAAADl////AAAAAAAAAADl//7/AAAAAAAAAADl//3/AAAAAAAAAADl//z/AAAAAAAAAADl//v/AAAAAAAAAADl//r/AAAAAAAAAADl//n/AAAAAAAAAAAUAAQAAAAAAAAAAAAUAAUAAAAAAAAAAAAVAAUAAAAAAAAAAAAVAAQAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_hxvw0")
+tile_set = ExtResource("6_fchn1")
+
+[node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=1485438117]
+tile_set = ExtResource("7_js5kw")
 
 [node name="LevelGoal" parent="." unique_id=2231350 instance=ExtResource("5_6i76a")]
 position = Vector2(1792, -64)
@@ -109,6 +934,29 @@ position = Vector2(624, 16)
 
 [node name="BreakableBoxes16" parent="." unique_id=1328132144 instance=ExtResource("7_cnw03")]
 position = Vector2(592, 16)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=652776759]
+environment = SubResource("Environment_fchn1")
+
+[node name="ProjectileEnemy" parent="." unique_id=1244299127 instance=ExtResource("11_gw3f4")]
+position = Vector2(-1408, 64)
+
+[connection signal="pressed" from="UI/LevelEnd/CanvasLayer/RestartButton" to="UI" method="_restart"]
+[connection signal="pressed" from="UI/LevelEnd/CanvasLayer/RestartButton" to="UI/LevelEnd/CanvasLayer/RestartButton" method="_onButtonPress"]
+[connection signal="pressed" from="UI/LevelEnd/CanvasLayer/QuitButton" to="UI" method="_quit"]
+[connection signal="pressed" from="UI/LevelEnd/CanvasLayer/QuitButton" to="UI/LevelEnd/CanvasLayer/QuitButton" method="_onButtonPress"]
+[connection signal="pressed" from="UI/LevelEnd/CanvasLayer/NextButton" to="UI" method="_nextScene"]
+[connection signal="pressed" from="UI/LevelEnd/CanvasLayer/NextButton" to="UI/LevelEnd/CanvasLayer/NextButton" method="_onButtonPress"]
+[connection signal="pressed" from="UI/PauseMenu/CanvasLayer/Background/Main/Resume" to="UI" method="_unpause"]
+[connection signal="pressed" from="UI/PauseMenu/CanvasLayer/Background/Main/Resume" to="UI/PauseMenu/CanvasLayer/Background/Main/Resume" method="_onButtonPress"]
+[connection signal="pressed" from="UI/PauseMenu/CanvasLayer/Background/Main/Restart" to="UI" method="_restart"]
+[connection signal="pressed" from="UI/PauseMenu/CanvasLayer/Background/Main/Restart" to="UI/PauseMenu/CanvasLayer/Background/Main/Restart" method="_onButtonPress"]
+[connection signal="pressed" from="UI/PauseMenu/CanvasLayer/Background/Main/Options" to="UI" method="_options"]
+[connection signal="pressed" from="UI/PauseMenu/CanvasLayer/Background/Main/Options" to="UI/PauseMenu/CanvasLayer/Background/Main/Options" method="_onButtonPress"]
+[connection signal="pressed" from="UI/PauseMenu/CanvasLayer/Background/Main/Quit" to="UI" method="_quit"]
+[connection signal="pressed" from="UI/PauseMenu/CanvasLayer/Background/Main/Quit" to="UI/PauseMenu/CanvasLayer/Background/Main/Quit" method="_onButtonPress"]
+[connection signal="pressed" from="UI/PauseMenu/CanvasLayer/Background/Option/BackButton" to="UI" method="_options"]
+[connection signal="pressed" from="UI/PauseMenu/CanvasLayer/Background/Option/BackButton" to="UI/PauseMenu/CanvasLayer/Background/Option/BackButton" method="_onButtonPress"]
 
 [editable path="Player"]
 [editable path="Player/HealthComponent"]

@@ -12,9 +12,12 @@ func _step(host : Node, delta : float):
 	host._directionHandler()
 	host._stompHandler(delta)
 	host._lookaheadHandler(delta)
+	host._afterImageUpdater()
 	host._slideCall()
 	
-	if host.isInCutscene:
+	if host.isDead:
+		return "Death"
+	elif host.isInCutscene:
 		return "Cutscene"
 	elif not host.isStomping:
 		return "Grounded"

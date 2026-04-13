@@ -1,0 +1,881 @@
+[gd_scene format=3 uid="uid://53eqsla5qqa"]
+
+[ext_resource type="Script" uid="uid://5ussmuj5v0n1" path="res://Scripts/Gameplay/MainMenuUI.gd" id="1_c6qkn"]
+[ext_resource type="Texture2D" uid="uid://dkmg88jrdwqvk" path="res://Art/Backgrounds/LevelEndBackground-Sheet.png" id="2_jx82o"]
+[ext_resource type="PackedScene" uid="uid://b08jjj3q4bpx6" path="res://Scenes/Other/debug_world.tscn" id="2_lub8s"]
+[ext_resource type="Script" uid="uid://dejulyvgi62lj" path="res://Scripts/Other/UITween.gd" id="2_yvl20"]
+[ext_resource type="Shader" uid="uid://b3jx0fe4tv8rq" path="res://Other/TransitionShader.gdshader" id="3_2c43b"]
+[ext_resource type="Texture2D" uid="uid://cff10q4xo8al2" path="res://Art/Backgrounds/MainMenu-Sheet.png" id="3_3yf3q"]
+[ext_resource type="Theme" uid="uid://cfcxi3lsf5lpw" path="res://Other/Themes/BaseTheme.tres" id="4_osx8e"]
+[ext_resource type="FontFile" uid="uid://d2ljhnhyolvg8" path="res://Other/Dosis-Bold.ttf" id="6_8dvag"]
+[ext_resource type="Theme" uid="uid://b1kyigv2v3r2t" path="res://Other/Themes/CheckboxTheme.tres" id="7_lrmpt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_48sax"]
+shader = ExtResource("3_2c43b")
+shader_parameter/progress = 0.0
+shader_parameter/diamondPixelSize = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vn1du"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_ycojq"]
+resource_name = "FadeIn"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.45000002, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_ed4m6"]
+resource_name = "FadeOut"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_13g3l"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/progress")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mg06l"]
+_data = {
+&"FadeIn": SubResource("Animation_ycojq"),
+&"FadeOut": SubResource("Animation_ed4m6"),
+&"RESET": SubResource("Animation_13g3l")
+}
+
+[sub_resource type="Animation" id="Animation_3yf3q"]
+resource_name = "Background"
+length = 0.6
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [4, 5, 6, 7, 8, 9]
+}
+
+[sub_resource type="Animation" id="Animation_osx8e"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8dvag"]
+_data = {
+&"Background": SubResource("Animation_3yf3q"),
+&"RESET": SubResource("Animation_osx8e")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lrmpt"]
+animation = &"Background"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lub8s"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_2c43b"]
+states/Background/node = SubResource("AnimationNodeAnimation_lrmpt")
+states/Background/position = Vector2(361, 89)
+transitions = ["Start", "Background", SubResource("AnimationNodeStateMachineTransition_lub8s")]
+
+[sub_resource type="LabelSettings" id="LabelSettings_48lu5"]
+font_size = 128
+
+[sub_resource type="LabelSettings" id="LabelSettings_c6qkn"]
+font = ExtResource("6_8dvag")
+font_size = 48
+outline_size = 32
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_yvl20"]
+font_size = 128
+
+[sub_resource type="LabelSettings" id="LabelSettings_jx82o"]
+font = ExtResource("6_8dvag")
+font_size = 64
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_3yf3q"]
+font = ExtResource("6_8dvag")
+font_size = 32
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_8dvag"]
+font = ExtResource("6_8dvag")
+font_size = 32
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_osx8e"]
+font = ExtResource("6_8dvag")
+font_size = 64
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_lrmpt"]
+font_size = 128
+
+[node name="MainMenu" type="Control" unique_id=1491200140]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_c6qkn")
+levelOne = ExtResource("2_lub8s")
+
+[node name="TransitionLayer" type="CanvasLayer" parent="." unique_id=1411573848]
+layer = 2
+visible = false
+
+[node name="Transition" type="Panel" parent="TransitionLayer" unique_id=1874617194]
+material = SubResource("ShaderMaterial_48sax")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_vn1du")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="TransitionLayer/Transition" unique_id=1883188785]
+libraries/ = SubResource("AnimationLibrary_mg06l")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=21134216]
+layer = -2
+
+[node name="Background" type="Sprite2D" parent="CanvasLayer" unique_id=638570706]
+position = Vector2(640, 360)
+texture = ExtResource("2_jx82o")
+hframes = 10
+frame = 4
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/Background" unique_id=2081894682]
+libraries/ = SubResource("AnimationLibrary_8dvag")
+
+[node name="AnimationTree" type="AnimationTree" parent="CanvasLayer/Background/AnimationPlayer" unique_id=1268488333]
+root_node = NodePath("../..")
+tree_root = SubResource("AnimationNodeStateMachine_2c43b")
+anim_player = NodePath("..")
+
+[node name="Player" type="Sprite2D" parent="CanvasLayer" unique_id=1028672560]
+visible = false
+texture = ExtResource("3_3yf3q")
+centered = false
+hframes = 3
+frame = 2
+
+[node name="MainPanel" type="Panel" parent="." unique_id=1700803140]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="MainPanel" unique_id=432302665]
+layout_mode = 0
+offset_left = 32.0
+offset_right = 763.0
+offset_bottom = 175.0
+text = "FLOWSTATE"
+label_settings = SubResource("LabelSettings_48lu5")
+
+[node name="TweenChildren" type="Control" parent="MainPanel" unique_id=262625319]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayButton" type="Button" parent="MainPanel/TweenChildren" unique_id=1646534018]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = -88.0
+offset_right = 448.0
+offset_bottom = -8.0
+grow_vertical = 2
+theme = ExtResource("4_osx8e")
+script = ExtResource("2_yvl20")
+changePosition = Vector2(-512, 272)
+textChangePosition = Vector2(0, -16)
+
+[node name="Label" type="Label" parent="MainPanel/TweenChildren/PlayButton" unique_id=1082275636]
+layout_mode = 0
+offset_right = 384.0
+offset_bottom = 67.0
+text = "PLAY"
+label_settings = SubResource("LabelSettings_c6qkn")
+horizontal_alignment = 1
+
+[node name="OptionsButton" type="Button" parent="MainPanel/TweenChildren" unique_id=1827926415]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 128.0
+offset_top = 56.0
+offset_right = 512.0
+offset_bottom = 136.0
+grow_vertical = 2
+theme = ExtResource("4_osx8e")
+script = ExtResource("2_yvl20")
+changePosition = Vector2(-512, 416)
+textChangePosition = Vector2(32, -16)
+
+[node name="Label" type="Label" parent="MainPanel/TweenChildren/OptionsButton" unique_id=730812457]
+layout_mode = 0
+offset_left = 32.0
+offset_right = 352.0
+offset_bottom = 67.0
+text = "OPTIONS"
+label_settings = SubResource("LabelSettings_c6qkn")
+horizontal_alignment = 1
+
+[node name="CloseButton" type="Button" parent="MainPanel/TweenChildren" unique_id=1961006426]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 192.0
+offset_top = 200.0
+offset_right = 576.0
+offset_bottom = 280.0
+grow_vertical = 2
+theme = ExtResource("4_osx8e")
+script = ExtResource("2_yvl20")
+changePosition = Vector2(-512, 560)
+textChangePosition = Vector2(0, -16)
+
+[node name="Label" type="Label" parent="MainPanel/TweenChildren/CloseButton" unique_id=2010869892]
+layout_mode = 0
+offset_right = 384.0
+offset_bottom = 67.0
+text = "EXIT"
+label_settings = SubResource("LabelSettings_c6qkn")
+horizontal_alignment = 1
+
+[node name="OptionsPanel" type="Panel" parent="." unique_id=849463166]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Options" type="Label" parent="OptionsPanel" unique_id=1391215218]
+layout_mode = 0
+offset_left = 32.0
+offset_right = 763.0
+offset_bottom = 175.0
+text = "OPTIONS"
+label_settings = SubResource("LabelSettings_yvl20")
+
+[node name="TweenChildren" type="Control" parent="OptionsPanel" unique_id=1996444903]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Volume" type="Label" parent="OptionsPanel/TweenChildren" unique_id=2097130192]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 788.0
+offset_top = 8.0
+offset_right = 1027.9994
+offset_bottom = 96.0
+grow_horizontal = 2
+text = "Volume"
+label_settings = SubResource("LabelSettings_jx82o")
+horizontal_alignment = 1
+script = ExtResource("2_yvl20")
+changePosition = Vector2(808, -128)
+
+[node name="MasterSlider" type="HSlider" parent="OptionsPanel/TweenChildren" unique_id=1174590734]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 716.0
+offset_top = 120.03
+offset_right = 1099.9998
+offset_bottom = 136.03
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("4_osx8e")
+max_value = 1.0
+step = 0.01
+value = 0.5
+script = ExtResource("2_yvl20")
+changePosition = Vector2(736, -128)
+
+[node name="Label" type="Label" parent="OptionsPanel/TweenChildren/MasterSlider" unique_id=1376856449]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -72.0
+offset_top = -48.0
+offset_right = 72.0
+offset_bottom = -3.0
+grow_horizontal = 2
+text = "Master"
+label_settings = SubResource("LabelSettings_3yf3q")
+horizontal_alignment = 1
+
+[node name="MusicSlider" type="HSlider" parent="OptionsPanel/TweenChildren" unique_id=1155199066]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 716.0
+offset_top = 200.0
+offset_right = 1100.0
+offset_bottom = 216.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("4_osx8e")
+max_value = 1.0
+step = 0.01
+value = 0.5
+script = ExtResource("2_yvl20")
+changePosition = Vector2(736, -128)
+
+[node name="Label" type="Label" parent="OptionsPanel/TweenChildren/MusicSlider" unique_id=90264116]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -72.0
+offset_top = -48.0
+offset_right = 72.0
+offset_bottom = -3.0
+grow_horizontal = 2
+text = "Music"
+label_settings = SubResource("LabelSettings_3yf3q")
+horizontal_alignment = 1
+
+[node name="SFXSlider" type="HSlider" parent="OptionsPanel/TweenChildren" unique_id=2127933159]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 716.0
+offset_top = 280.0
+offset_right = 1100.0
+offset_bottom = 296.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("4_osx8e")
+max_value = 1.0
+step = 0.01
+value = 0.5
+script = ExtResource("2_yvl20")
+changePosition = Vector2(736, -128)
+
+[node name="Label" type="Label" parent="OptionsPanel/TweenChildren/SFXSlider" unique_id=1040805143]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -72.0
+offset_top = -48.0
+offset_right = 72.0
+offset_bottom = -3.0
+grow_horizontal = 2
+text = "SFX"
+label_settings = SubResource("LabelSettings_3yf3q")
+horizontal_alignment = 1
+
+[node name="Visuals" type="Label" parent="OptionsPanel/TweenChildren" unique_id=2109831643]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 820.0
+offset_top = 392.0
+offset_right = 1004.0
+offset_bottom = 480.0
+grow_horizontal = 2
+text = "Visuals"
+label_settings = SubResource("LabelSettings_jx82o")
+horizontal_alignment = 1
+script = ExtResource("2_yvl20")
+changePosition = Vector2(1400, 392)
+
+[node name="Fullscreen" type="Button" parent="OptionsPanel/TweenChildren" unique_id=1827580004]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 860.0
+offset_top = 449.0
+offset_right = 908.0
+offset_bottom = 496.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("7_lrmpt")
+toggle_mode = true
+script = ExtResource("2_yvl20")
+changePosition = Vector2(1600, 504)
+
+[node name="Label" type="Label" parent="OptionsPanel/TweenChildren/Fullscreen" unique_id=1024107254]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -184.0
+offset_top = -27.5
+offset_right = 11.0
+offset_bottom = 26.5
+grow_vertical = 2
+text = "FULLSCREEN"
+label_settings = SubResource("LabelSettings_8dvag")
+vertical_alignment = 1
+
+[node name="VSync" type="Button" parent="OptionsPanel/TweenChildren" unique_id=925503190]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 1092.0
+offset_top = 449.0
+offset_right = 1140.0
+offset_bottom = 496.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("7_lrmpt")
+toggle_mode = true
+script = ExtResource("2_yvl20")
+changePosition = Vector2(1600, 504)
+
+[node name="Label" type="Label" parent="OptionsPanel/TweenChildren/VSync" unique_id=1148273172]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -104.0
+offset_top = -27.5
+offset_right = -2.0
+offset_bottom = 26.5
+grow_vertical = 2
+text = "VSYNC"
+label_settings = SubResource("LabelSettings_8dvag")
+vertical_alignment = 1
+
+[node name="BackButton" type="Button" parent="OptionsPanel/TweenChildren" unique_id=1396133847]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 716.0
+offset_top = 568.0
+offset_right = 1100.0
+offset_bottom = 648.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("4_osx8e")
+script = ExtResource("2_yvl20")
+changePosition = Vector2(736, 760)
+textChangePosition = Vector2(64, -24)
+
+[node name="Label" type="Label" parent="OptionsPanel/TweenChildren/BackButton" unique_id=1383345541]
+layout_mode = 1
+offset_left = 64.0
+offset_top = -8.0
+offset_right = 320.0
+offset_bottom = 80.0
+text = "BACK"
+label_settings = SubResource("LabelSettings_osx8e")
+horizontal_alignment = 1
+
+[node name="VolumePanel" type="Panel" parent="OptionsPanel" unique_id=1067131610]
+visible = false
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -632.0
+offset_top = -344.0
+offset_right = -56.0
+offset_bottom = 24.0
+grow_horizontal = 0
+grow_vertical = 2
+script = ExtResource("2_yvl20")
+changePosition = Vector2(640, -512)
+
+[node name="VisualsPanel" type="Panel" parent="OptionsPanel" unique_id=1685462544]
+visible = false
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -632.0
+offset_top = 40.0
+offset_right = -55.998047
+offset_bottom = 232.0
+grow_horizontal = 0
+grow_vertical = 2
+script = ExtResource("2_yvl20")
+changePosition = Vector2(1600, 400)
+
+[node name="LevelSelectPanel" type="Panel" parent="." unique_id=1864584109]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LevelSelect" type="Label" parent="LevelSelectPanel" unique_id=1399044178]
+layout_mode = 0
+offset_left = 32.0
+offset_right = 763.0
+offset_bottom = 175.0
+text = "LEVEL SELECT"
+label_settings = SubResource("LabelSettings_lrmpt")
+
+[node name="TweenChildren" type="Control" parent="LevelSelectPanel" unique_id=1825115107]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Level1Button" type="Button" parent="LevelSelectPanel/TweenChildren" unique_id=220637704]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -296.0
+offset_top = -104.0
+offset_right = -216.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_osx8e")
+script = ExtResource("2_yvl20")
+changePosition = Vector2(1500, 256)
+textChangePosition = Vector2(16, -24)
+
+[node name="Label" type="Label" parent="LevelSelectPanel/TweenChildren/Level1Button" unique_id=1607981246]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -48.0
+offset_right = 24.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "1"
+label_settings = SubResource("LabelSettings_osx8e")
+horizontal_alignment = 1
+
+[node name="Level2Button" type="Button" parent="LevelSelectPanel/TweenChildren" unique_id=753507446]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -168.0
+offset_top = -104.0
+offset_right = -88.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_osx8e")
+script = ExtResource("2_yvl20")
+changePosition = Vector2(1500, 256)
+textChangePosition = Vector2(16, -24)
+
+[node name="Label" type="Label" parent="LevelSelectPanel/TweenChildren/Level2Button" unique_id=1660750031]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -48.0
+offset_right = 24.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "2"
+label_settings = SubResource("LabelSettings_osx8e")
+horizontal_alignment = 1
+
+[node name="Level3Button" type="Button" parent="LevelSelectPanel/TweenChildren" unique_id=1471855202]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -104.0
+offset_right = 40.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_osx8e")
+script = ExtResource("2_yvl20")
+changePosition = Vector2(1500, 256)
+textChangePosition = Vector2(16, -24)
+
+[node name="Label" type="Label" parent="LevelSelectPanel/TweenChildren/Level3Button" unique_id=1466568483]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -48.0
+offset_right = 24.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "3"
+label_settings = SubResource("LabelSettings_osx8e")
+horizontal_alignment = 1
+
+[node name="Level4Button" type="Button" parent="LevelSelectPanel/TweenChildren" unique_id=760520358]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 88.0
+offset_top = -104.0
+offset_right = 168.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_osx8e")
+script = ExtResource("2_yvl20")
+changePosition = Vector2(1500, 256)
+textChangePosition = Vector2(16, -24)
+
+[node name="Label" type="Label" parent="LevelSelectPanel/TweenChildren/Level4Button" unique_id=726107545]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -48.0
+offset_right = 24.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "4"
+label_settings = SubResource("LabelSettings_osx8e")
+horizontal_alignment = 1
+
+[node name="Level5Button" type="Button" parent="LevelSelectPanel/TweenChildren" unique_id=1116794528]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 216.0
+offset_top = -104.0
+offset_right = 296.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_osx8e")
+script = ExtResource("2_yvl20")
+changePosition = Vector2(1500, 256)
+textChangePosition = Vector2(16, -24)
+
+[node name="Label" type="Label" parent="LevelSelectPanel/TweenChildren/Level5Button" unique_id=682347444]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -48.0
+offset_right = 24.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "5"
+label_settings = SubResource("LabelSettings_osx8e")
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="LevelSelectPanel/TweenChildren" unique_id=1676733901]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 96.0
+offset_top = -120.0
+offset_right = 480.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("4_osx8e")
+script = ExtResource("2_yvl20")
+changePosition = Vector2(736, 800)
+textChangePosition = Vector2(64, -24)
+
+[node name="Label" type="Label" parent="LevelSelectPanel/TweenChildren/BackButton" unique_id=1994797502]
+layout_mode = 1
+offset_left = 64.0
+offset_top = -8.0
+offset_right = 320.0
+offset_bottom = 80.0
+text = "BACK"
+label_settings = SubResource("LabelSettings_osx8e")
+horizontal_alignment = 1
+
+[connection signal="pressed" from="MainPanel/TweenChildren/PlayButton" to="." method="_onTransitionLevelSelect"]
+[connection signal="pressed" from="MainPanel/TweenChildren/PlayButton" to="MainPanel/TweenChildren/PlayButton" method="_onButtonPress"]
+[connection signal="pressed" from="MainPanel/TweenChildren/OptionsButton" to="." method="_onTransitionOptionsPanel"]
+[connection signal="pressed" from="MainPanel/TweenChildren/OptionsButton" to="MainPanel/TweenChildren/OptionsButton" method="_onButtonPress"]
+[connection signal="pressed" from="MainPanel/TweenChildren/CloseButton" to="." method="_onCloseGame"]
+[connection signal="pressed" from="MainPanel/TweenChildren/CloseButton" to="MainPanel/TweenChildren/CloseButton" method="_onButtonPress"]
+[connection signal="value_changed" from="OptionsPanel/TweenChildren/MasterSlider" to="." method="_onMasterChange"]
+[connection signal="value_changed" from="OptionsPanel/TweenChildren/MusicSlider" to="." method="_onMusicChanged"]
+[connection signal="value_changed" from="OptionsPanel/TweenChildren/SFXSlider" to="." method="_onSFXChange"]
+[connection signal="toggled" from="OptionsPanel/TweenChildren/Fullscreen" to="." method="_onFullscreen"]
+[connection signal="toggled" from="OptionsPanel/TweenChildren/VSync" to="." method="_onVSync"]
+[connection signal="pressed" from="OptionsPanel/TweenChildren/BackButton" to="." method="_onTransitionMainPanelOptions"]
+[connection signal="pressed" from="OptionsPanel/TweenChildren/BackButton" to="OptionsPanel/TweenChildren/BackButton" method="_onButtonPress"]
+[connection signal="pressed" from="LevelSelectPanel/TweenChildren/Level1Button" to="." method="_onPlayLevelOne"]
+[connection signal="pressed" from="LevelSelectPanel/TweenChildren/Level1Button" to="LevelSelectPanel/TweenChildren/Level1Button" method="_onButtonPress"]
+[connection signal="pressed" from="LevelSelectPanel/TweenChildren/Level2Button" to="." method="_onPlayLevelTwo"]
+[connection signal="pressed" from="LevelSelectPanel/TweenChildren/Level2Button" to="LevelSelectPanel/TweenChildren/Level2Button" method="_onButtonPress"]
+[connection signal="pressed" from="LevelSelectPanel/TweenChildren/Level3Button" to="." method="_onPlayLevelThree"]
+[connection signal="pressed" from="LevelSelectPanel/TweenChildren/Level3Button" to="LevelSelectPanel/TweenChildren/Level3Button" method="_onButtonPress"]
+[connection signal="pressed" from="LevelSelectPanel/TweenChildren/Level4Button" to="." method="_onPlayLevelFour"]
+[connection signal="pressed" from="LevelSelectPanel/TweenChildren/Level4Button" to="LevelSelectPanel/TweenChildren/Level4Button" method="_onButtonPress"]
+[connection signal="pressed" from="LevelSelectPanel/TweenChildren/Level5Button" to="." method="_onPlayLevelFive"]
+[connection signal="pressed" from="LevelSelectPanel/TweenChildren/Level5Button" to="LevelSelectPanel/TweenChildren/Level5Button" method="_onButtonPress"]
+[connection signal="pressed" from="LevelSelectPanel/TweenChildren/BackButton" to="." method="_onTransitionMainPanelLevel"]
+[connection signal="pressed" from="LevelSelectPanel/TweenChildren/BackButton" to="LevelSelectPanel/TweenChildren/BackButton" method="_onButtonPress"]

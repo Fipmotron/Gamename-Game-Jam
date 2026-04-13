@@ -13,7 +13,9 @@ func _step(host : Node, delta : float):
 	host._dashHandler(delta)
 	host._lookaheadHandler(delta)
 	host._spriteReform(delta)
+	host._afterImageUpdater()
 	host._slideCall()
+	
 	
 	if host.isInCutscene:
 		return "Cutscene"

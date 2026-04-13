@@ -69,6 +69,7 @@ var playedStompParticles : bool
 @onready var parryHitbox := $Hitboxes/ParryHitboxComponent
 var flowStartPosition : Vector2
 var flowEndPosition : Vector2
+var flowTrailEndPosition : Vector2
 var attackTimer : float
 var flowAttackTimer : float
 var flowAttackCooldownTimer : float
@@ -112,6 +113,14 @@ var attackStatemachine
 var otherStatemachine
 var cutsceneStatemachine
 
+@export_category("After-Image Varibles")
+@export var afterImageSpeed : float
+@onready var afterImages := $AfterImages
+@onready var imageOne := $AfterImages/ImageOne
+@onready var imageTwo := $AfterImages/ImageTwo
+@onready var imageThree := $AfterImages/ImageThree
+@onready var imageFour := $AfterImages/ImageFour
+
 @export_category("Particle Varibles")
 @export var runParticles : PackedScene
 @export var jumpLineParticles : PackedScene
@@ -122,9 +131,13 @@ var cutsceneStatemachine
 @export var dashLineParticles : PackedScene
 @export var dashPuffParticles : PackedScene
 @export var deathParticles : PackedScene
+@export var flowTrail : PackedScene
+@onready var flowParticles := $Sprite2D/FlowParticles
+var flowTrailReference : Line2D
 
 @export_category("Cutscene Varibles")
 var isInCutscene : bool
+var cutsceneAnimation : String
 
 func _ready() -> void:
 	maxSpeed = baseMaxSpeed
@@ -183,6 +196,8 @@ func _jumpCheck(delta : float):
 	
 	if jumpBufferTimer > 0.0 and coyoteTimer > 0.0:
 		_spawnJumpParticles()
+		$SFX/JumpSFX.pitch_scale = randf_range(0.75, 1.25)
+		$SFX/JumpSFX.play()
 		isJumping = true
 		jumpTimer = jumpTime
 		jumpBufferTimer = 0.0
@@ -193,6 +208,8 @@ func _doubleJumpCheck():
 		isJumping = true
 		_spawnJumpParticles()
 		canDoubleJump = false
+		$SFX/JumpSFX.pitch_scale = randf_range(0.75, 1.25)
+		$SFX/JumpSFX.play()
 		jumpTimer = jumpTime
 
 func _jumpHandler(delta : float):
@@ -215,6 +232,8 @@ func _dashCheck(delta : float):
 		canDash = false
 		dashTimer = dashTime
 		dashCooldownTimer = dashCooldownTime
+		$SFX/DashSFX.pitch_scale = randf_range(0.75, 1.25)
+		$SFX/DashSFX.play()
 	
 	if dashCooldownTimer > 0.0 and not isDashing:
 		dashCooldownTimer -= delta
@@ -256,6 +275,7 @@ func _stompHandler(delta : float):
 			SignalManager.emit_signal("shakeScreen", SHAKE_STRENGTH, SHAKE_TIME, SHAKE_DECAY)
 			_spawnStompRecoveryParticles()
 			playedStompParticles = true
+			$SFX/StompSFX.play()
 		
 		stompCooldownTimer -= delta
 		
@@ -303,6 +323,9 @@ func _basicAttackHandler(delta : float):
 func _enableBasicAttack():
 	const DISTANCE_AWAY_FROM_PLAYER = 32.0
 	
+	$SFX/SlashSFX.pitch_scale = randf_range(0.75, 1.25)
+	$SFX/SlashSFX.play()
+	
 	if lastStoredDirection > 0.0:
 		slashHitbox.get_child(0).position.x = DISTANCE_AWAY_FROM_PLAYER
 	else:
@@ -323,19 +346,39 @@ func _disableBasicAttack():
 	slashHitbox.get_child(0).disabled = true
 
 func _flowAttackCheck(_delta : float):
+	#print(flowState, " ", isFlowAttacking, " ", flowAttackCooldownTimer)
+	
 	if Input.is_action_just_pressed("Flow Attack") and flowState > 0.0 and not isFlowAttacking and flowAttackCooldownTimer <= 0.0:
 		isFlowAttacking = true
 		flowAttackTimer = flowAttackTime
 		flowStartPosition = global_position
 		flowEndPosition = get_global_mouse_position()
+		var flowDirection = (flowEndPosition - flowStartPosition).normalized()
+		lastStoredDirection = flowDirection.x
+		flowParticles.emitting = true
+		_makeTrail()
+		_enableBasicAttack()
+
+func _makeTrail():
+	var trail = flowTrail.instantiate()
+	get_tree().root.add_child(trail)
+	flowTrailReference = trail
+	trail.global_position = global_position
+	trail.points[0] = flowTrailReference.to_local(flowStartPosition)
 
 func _flowAttackHandler(delta : float):
 	var flowDirection = (flowEndPosition - flowStartPosition).normalized()
-	
 	velocity = flowDirection * flowAttackSpeed
 	flowAttackTimer -= delta
 	
+	
 	if flowAttackTimer <= 0.0:
+		flowParticles.emitting = false
+		flowTrailReference.points[1] = flowTrailReference.to_local(global_position)
+		
+		flowTrailReference._startDeath()
+		
+		_disableBasicAttack()
 		_cancelFlowAttack()
 
 func _cancelFlowAttack():
@@ -344,6 +387,16 @@ func _cancelFlowAttack():
 	flowAttackCooldownTimer = flowAttackCooldownTime
 
 func _enableFlowHitbox():
+	$SFX/FlowSlashSFX.play()
+	
+	var flowDirection = (flowEndPosition - flowStartPosition).normalized()
+	lastStoredDirection = flowDirection.x
+	
+	if flowDirection.x > 0.0:
+		sprite.flip_h = false
+	elif flowDirection.x < 0.0:
+		sprite.flip_h = true
+	
 	flowHitbox.get_child(0).disabled = false
 
 func _disableFlowHitbox():
@@ -364,6 +417,8 @@ func _parryCheck(delta : float):
 		parryTimer = parryTime
 		parryDetector.get_child(0).disabled = false
 		isParrying = true
+		_disableHealth()
+		$SFX/ParrySFX.play()
 	
 	if parryCooldownTimer > 0.0:
 		parryCooldownTimer -= delta
@@ -382,6 +437,7 @@ func _parryHandler(delta : float):
 			
 			global_position = contactNode.shooter.global_position
 			contactNode._destroy()
+			flowState = maxFlowState
 		elif contactNode is Enemy:
 			if (global_position - contactNode.global_position).normalized().x > 0.0:
 				parryBoostDirection = 1 
@@ -390,6 +446,7 @@ func _parryHandler(delta : float):
 			
 			global_position = contactNode.global_position
 			contactNode._onDeath(0.0)
+			flowState = maxFlowState
 		else:
 			print("What happened? - Parry Handler, Player.gd")
 		
@@ -404,6 +461,7 @@ func _parryHandler(delta : float):
 			parryDetector.get_child(0).disabled = true
 			parryHitbox.get_child(0).disabled = true
 			isParrying = false
+			_enableHealth()
 	elif parryTimer > 0.0:
 		parryTimer -= delta
 		
@@ -411,6 +469,7 @@ func _parryHandler(delta : float):
 		parryCooldownTimer = parryCooldownTime
 		parryDetector.get_child(0).disabled = true
 		parryHitbox.get_child(0).disabled = true
+		_enableHealth()
 		isParrying = false
 
 func _parryBoost():
@@ -433,9 +492,11 @@ func _flowHandler(delta : float):
 		
 		flowMultiplier = baseFlowMultipler
 	else:
-		flowMultiplier =  flowDecayMultuplier
+		flowMultiplier = flowDecayMultuplier
 	
 	flowState = clampf(flowState, 0.0, maxFlowState)
+	
+	SignalManager.emit_signal("flowTracker", flowState)
 
 func _lookaheadHandler(delta : float):
 	cameraFollower.position = cameraFollower.position.lerp(velocity.normalized() * radius, delta * followSpeed)
@@ -448,6 +509,9 @@ func _spriteFlipper():
 		sprite.flip_h = false
 	elif direction < 0.0:
 		sprite.flip_h = true
+
+func _spriteInvisible():
+	sprite.visible = false
 
 func _spriteAirDeform():
 	sprite.scale.y = remap(abs(velocity.y), 0, abs(jumpForce), 0.75, 1.75)
@@ -466,6 +530,43 @@ func _spriteReform(delta : float):
 	
 	sprite.scale.x = move_toward(sprite.scale.x, 1, REFORM_TIME * delta)
 	sprite.scale.y = move_toward(sprite.scale.y, 1, REFORM_TIME * delta)
+
+func _afterImageUpdater():
+	if flowState > 0.0:
+		imageOne.global_position = lerp(imageOne.global_position, global_position + Vector2(0, 16), afterImageSpeed * 1.4)
+		imageTwo.global_position = lerp(imageTwo.global_position, imageOne.global_position, afterImageSpeed * 0.85)
+		imageThree.global_position = lerp(imageThree.global_position, imageTwo.global_position, afterImageSpeed * 0.85)
+		imageFour.global_position = lerp(imageFour.global_position, imageThree.global_position, afterImageSpeed * 0.85)
+		
+		for child in afterImages.get_children():
+			child.frame = sprite.frame
+			child.flip_h = sprite.flip_h
+			child.scale = sprite.scale
+			
+			const DISAPPEAR_DISTANCE = 1.0
+			const APPEAR_DISTANCE_ONE = 16.0
+			const APPEAR_DISTANCE_TWO = 48.0
+			const APPEAR_DISTANCE_THREE = 64.0
+			const APPEAR_DISTANCE_FOUR = 128.0
+			
+			if child.global_position.distance_to(global_position + Vector2(0, 16)) <= DISAPPEAR_DISTANCE:
+				child.modulate.a = move_toward(child.modulate.a, 0, 10.0)
+			else:
+				if child.global_position.distance_to(global_position + Vector2(0, 16)) <= APPEAR_DISTANCE_ONE:
+					child.modulate.a = move_toward(child.modulate.a, 1, 1.0)
+				elif child.global_position.distance_to(global_position + Vector2(0, 16)) <= APPEAR_DISTANCE_TWO:
+					child.modulate.a = move_toward(child.modulate.a, 0.6, 0.5)
+				elif child.global_position.distance_to(global_position + Vector2(0, 16)) <= APPEAR_DISTANCE_THREE:
+					child.modulate.a = move_toward(child.modulate.a, 0.4, 0.5)
+				elif child.global_position.distance_to(global_position + Vector2(0, 16)) <= APPEAR_DISTANCE_FOUR:
+					child.modulate.a = move_toward(child.modulate.a, 0.25, 0.1)
+	else:
+		for child in afterImages.get_children():
+			child.modulate.a = move_toward(child.modulate.a, 0, 10.0)
+
+func _disableAfterImage():
+	for child in afterImages.get_children():
+		child.visible = false
 
 func _animIdle():
 	mainStatemachine.travel("Grounded")
@@ -557,14 +658,24 @@ func _spawnLandParticles():
 	particle.global_position = sprite.global_position
 
 func _spawnDeathParticles():
-	pass
+	var particle = deathParticles.instantiate()
+	get_tree().root.add_child(particle)
+	particle.global_position = sprite.global_position
+
+func _runSFX():
+	$SFX/RunSFX.play()
 
 func _endLevel():
 	isInCutscene = true
 	
-	mainStatemachine.travel("Cutscene")
+	cutsceneAnimation = "LevelEnd"
 	
 	SignalManager.emit_signal("cameraToPlayer", self)
+
+func _cutscenePlayer():
+	mainStatemachine.travel("Cutscene")
+	sprite.flip_h = false
+	cutsceneStatemachine.start(cutsceneAnimation)
 
 func _resetVelocity():
 	velocity = Vector2.ZERO
@@ -581,6 +692,17 @@ func _onDeath(damageTaken : float):
 	print("PLAYER DEATH")
 	
 	if flowState > 0.0:
+		flowState = 0.0
+		$SFX/HitSFX.play()
 		healthComponent.health += damageTaken
 	else:
+		deathTimer = deathTime
+		$SFX/DeathSFX.play()
 		isDead = true
+
+func _deathHandler(delta):
+	deathTimer -= delta
+	
+	if deathTimer <= 0.0:
+		print("emit")
+		SignalManager.emit_signal("restartLevel")

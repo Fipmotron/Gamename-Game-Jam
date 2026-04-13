@@ -21,8 +21,16 @@ func _ready() -> void:
 
 func _onHit(area : Area2D):
 	if area is Hitbox:
+		const SHAKE_STRENGTH = 10.0
+		const SHAKE_TIME = 0.1
+		const SHAKE_DECAY = 5.0
+		
+		SignalManager.emit_signal("shakeScreen", SHAKE_STRENGTH, SHAKE_TIME, SHAKE_DECAY)
 		
 		health -= area.damage
+		
+		if area.owner is Player:
+			area.owner.flowState += flowAmount
 		
 		if health <= 0.0:
 			emit_signal("death", area.damage)

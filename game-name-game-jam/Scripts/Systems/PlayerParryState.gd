@@ -11,9 +11,12 @@ func _step(host : Node, delta : float):
 	host._parryHandler(delta)
 	host._spriteReform(delta)
 	host._lookaheadHandler(delta)
+	host._afterImageUpdater()
 	host._slideCall()
 	
-	if not host.isParrying:
+	if host.isDead:
+		return "Death"
+	elif not host.isParrying:
 		if host.is_on_floor():
 			return "Grounded"
 		else:

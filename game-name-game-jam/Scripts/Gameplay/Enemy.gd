@@ -2,6 +2,8 @@ extends CharacterBody2D
 
 class_name Enemy
 
+@export var deathSFX : PackedScene
+
 @export_category("Component References")
 @export var detectionComponent : DetectionComponent
 @export var hitboxComponent : Hitbox
@@ -37,7 +39,13 @@ var attackCooldownTimer : float
 var canAttack : bool
 
 @export_category("Projectile Varibles")
+@export var projectile : PackedScene
 @export var projectileOnDetect : bool
+@export var launchTowardsPlayer : bool
+@export var teleportToPlayer : bool
+@export var isABomb : bool
+@export var explodeTime : float
+@export var launchForce : float
 
 @export_category("Detection Varibles")
 @export var maintainDetection : bool
@@ -94,11 +102,29 @@ func _respawnHandler(delta : float):
 			_respawn()
 
 func _startAttack():
-	hitboxComponent.get_child(0).disabled = false
+	$SFX/Attack.pitch_scale = randf_range(0.75, 1.25)
+	$SFX/Attack.play()
+	
+	if projectileOnDetect:
+		var proj = projectile.instantiate()
+		get_tree().root.add_child(proj)
+		proj.shooter = self
+		
+		if teleportToPlayer:
+			proj.global_position = get_tree().get_first_node_in_group("Player").global_position
+		
+		if isABomb:
+			proj.explodeTimer = explodeTime
+		
+	else:
+		hitboxComponent.get_child(0).disabled = false
+	
 	attackTimer = attackTime
 
 func _endAttack():
-	hitboxComponent.get_child(0).set_deferred("disabled", true)
+	if not projectileOnDetect:
+		hitboxComponent.get_child(0).set_deferred("disabled", true)
+	
 	attackCooldownTimer = attackCooldownTime
 	attackBuildupTimer = attackBuildupTime
 	playedAttack = false
@@ -110,6 +136,7 @@ func _onHit(_damage : float):
 
 func _onDeath(_damage : float):
 	print("ENENMY DEATH")
+	
 	
 	_endAttack()
 	detectionComponent.get_child(0).set_deferred("disabled", true)
@@ -127,7 +154,11 @@ func _onDeath(_damage : float):
 func _spawnDeathParticles():
 	var particles = deathParticles.instantiate()
 	get_tree().root.add_child(particles)
-	particles.global_position = global_position
+	particles.global_position = global_position 
+	var sfx = deathSFX.instantiate()
+	sfx.pitch_scale = randf_range(0.75, 1.25)
+	get_tree().root.add_child(sfx)
+	sfx.global_position = global_position 
 
 func _respawn():
 	pass
